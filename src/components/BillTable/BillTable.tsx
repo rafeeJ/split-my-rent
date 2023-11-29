@@ -1,12 +1,11 @@
-"use client";
-
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
+import { useEffect, useState } from "react";
+import { THousemate } from "@/components/HousemateTable/columns";
 import {
   Table,
   TableBody,
@@ -16,8 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useEffect, useState } from "react";
-import { THousemate } from "@/components/HousemateTable/columns";
 import { AddHousemateButton } from "@/components/HousemateTable/AddHousemateButton";
 
 interface DataTableProps {
@@ -25,7 +22,7 @@ interface DataTableProps {
   propData: any[];
 }
 
-export function HouseMateTable({ columns, propData }: DataTableProps) {
+export function BillTable({ columns, propData }: DataTableProps) {
   const [data, setData] = useState(() => {
     return propData;
   });
