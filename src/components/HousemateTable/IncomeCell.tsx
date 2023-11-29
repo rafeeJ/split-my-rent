@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 
 export const IncomeCell = ({
@@ -13,10 +13,13 @@ export const IncomeCell = ({
   table: any;
 }) => {
   const initialValue = getValue();
-  const columnMeta = column.columnDef.meta;
   const tableMeta = table.options.meta;
 
   const [value, setValue] = useState(initialValue);
+
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
 
   const onBlur = (e: ChangeEvent<HTMLInputElement>) => {
     tableMeta?.updateData(row.index, column.id, value, e.target.validity.valid);

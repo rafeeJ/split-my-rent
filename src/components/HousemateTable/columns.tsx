@@ -4,6 +4,7 @@ import {
   createColumnHelper,
 } from "@tanstack/react-table";
 import { IncomeCell } from "@/components/HousemateTable/IncomeCell";
+import { DeleteHousemateButton } from "@/components/HousemateTable/DeleteHousemateButton";
 
 export type THousemate = {
   name: string;
@@ -41,5 +42,9 @@ export const columns = [
         </div>
       );
     },
+  }),
+  columnHelper.display({
+    id: "delete",
+    cell: DeleteHousemateButton,
   }),
 ];

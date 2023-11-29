@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { THousemate } from "@/components/HousemateTable/columns";
 import { AddHousemateButton } from "@/components/HousemateTable/AddHousemateButton";
 
@@ -30,6 +30,11 @@ export function HouseMateTable({ columns, propData }: DataTableProps) {
     console.log("propData", propData);
     return propData;
   });
+
+  useEffect(() => {
+    console.log("data", data);
+    console.log(table.getRowModel().rows);
+  }, [data]);
 
   const table = useReactTable({
     data,
@@ -56,6 +61,11 @@ export function HouseMateTable({ columns, propData }: DataTableProps) {
         };
         const setFunction = (old: any[]) => [...old, newRow];
         setData(setFunction);
+      },
+      removeRow: (rowIndex: number) => {
+        const setFilterFunc = (old: THousemate[]) =>
+          old.filter((_row: THousemate, index: number) => index !== rowIndex);
+        setData(setFilterFunc);
       },
     },
   });
