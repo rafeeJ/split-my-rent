@@ -11,11 +11,14 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
+import { THousemate } from "@/components/HousemateTable/columns";
+import { AddHousemateButton } from "@/components/HousemateTable/AddHousemateButton";
 
 interface DataTableProps {
   columns: ColumnDef<any, any>[];
@@ -45,6 +48,14 @@ export function HouseMateTable({ columns, propData }: DataTableProps) {
             return row;
           }),
         );
+      },
+      addRow: () => {
+        const newRow: THousemate = {
+          name: "Housemate",
+          income: 1000,
+        };
+        const setFunction = (old: any[]) => [...old, newRow];
+        setData(setFunction);
       },
     },
   });
@@ -94,6 +105,13 @@ export function HouseMateTable({ columns, propData }: DataTableProps) {
             </TableRow>
           )}
         </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={columns.length} className="h-24 text-center">
+              <AddHousemateButton table={table} />
+            </TableCell>
+          </TableRow>
+        </TableFooter>
       </Table>
     </div>
   );
