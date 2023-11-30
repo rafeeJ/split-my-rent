@@ -52,46 +52,51 @@ export default function Home() {
   ]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-4 md:p-24 gap-y-2">
-      <h1 className={"text-3xl"}>Split My Rent</h1>
-      <h3 className={"text-2xl"}>A simple rent splitting app</h3>
-      <div className={"w-full"}>
-        <div className={"p-2"}>
-          <h1 className={"text-xl"}>Incomes</h1>
-          <h3 className={"text-md"}>Add your housemates here!</h3>
-        </div>
-        <HouseMateTable
-          columns={HousemateColumns}
-          data={housemates}
-          setData={setHousemates}
-        />
+    <main className="min-h-screen items-center justify-between p-4 md:p-10 gap-y-2">
+      <div className={"flex flex-col p-2 md:text-center"}>
+        <h1 className={"text-3xl"}>Split My Rent</h1>
+        <h3 className={"text-2xl"}>A simple rent splitting app</h3>
       </div>
 
-      <div className={"w-full"}>
-        <div className={"p-2"}>
-          <h1 className={"text-xl"}>Add Bills</h1>
-          <h3 className={"text-md"}>By the month!</h3>
+      <div className={"flex flex-col md:grid md:grid-cols-2 md:gap-8 gap-2"}>
+        <div className={"w-full"}>
+          <div className={"p-2"}>
+            <h1 className={"text-xl"}>Incomes</h1>
+            <h3 className={"text-md"}>Add your housemates here!</h3>
+          </div>
+          <HouseMateTable
+            columns={HousemateColumns}
+            data={housemates}
+            setData={setHousemates}
+          />
         </div>
 
-        <BillTable
-          columns={BillColumns}
-          data={bills}
-          setData={setBills}
-          housemates={housemates}
-        />
+        <div className={"w-full"}>
+          <div className={"p-2"}>
+            <h1 className={"text-xl"}>Add Bills</h1>
+            <h3 className={"text-md"}>By the month!</h3>
+          </div>
+
+          <BillTable
+            columns={BillColumns}
+            data={bills}
+            setData={setBills}
+            housemates={housemates}
+          />
+        </div>
+
+        <Separator className={"md:hidden"} />
+
+        <Card className={"w-full md:col-span-2"}>
+          <CardHeader>
+            <CardTitle>Results</CardTitle>
+            <CardDescription>See the results here!</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ResultsTable housemateData={housemates} billData={bills} />
+          </CardContent>
+        </Card>
       </div>
-
-      <Separator />
-
-      <Card className={"w-full"}>
-        <CardHeader>
-          <CardTitle>Results</CardTitle>
-          <CardDescription>See the results here!</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ResultsTable housemateData={housemates} billData={bills} />
-        </CardContent>
-      </Card>
     </main>
   );
 }
