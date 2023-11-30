@@ -4,7 +4,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { THousemate } from "@/components/HousemateTable/columns";
 import {
   Table,
@@ -20,21 +20,18 @@ import { TBill } from "@/components/BillTable/Columns";
 
 interface DataTableProps {
   columns: ColumnDef<any, any>[];
-  propData: any[];
+  data: TBill[];
+  setData: Dispatch<SetStateAction<TBill[]>>;
 }
 
-export function BillTable({ columns, propData }: DataTableProps) {
-  const [data, setData] = useState(() => {
-    return propData;
-  });
-
+export function BillTable({ columns, data, setData }: DataTableProps) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     meta: {
       updateData: (rowIndex: number, columnId: string, value: string) => {
-        setData((old) =>
+        setData((old: TBill[]) =>
           old.map((row, index) => {
             if (index === rowIndex) {
               return {
@@ -55,8 +52,8 @@ export function BillTable({ columns, propData }: DataTableProps) {
         setData(setFunction);
       },
       removeRow: (rowIndex: number) => {
-        const setFilterFunc = (old: THousemate[]) =>
-          old.filter((_row: THousemate, index: number) => index !== rowIndex);
+        const setFilterFunc = (old: TBill[]) =>
+          old.filter((_row: TBill, index: number) => index !== rowIndex);
         setData(setFilterFunc);
       },
     },
