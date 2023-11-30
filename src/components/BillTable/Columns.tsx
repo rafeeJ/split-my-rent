@@ -1,8 +1,9 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import { IncomeCell } from "@/components/HousemateTable/IncomeCell";
+import { CurrencyCell } from "@/components/common/CurrencyCell";
 import { DeleteHousemateButton } from "@/components/HousemateTable/DeleteHousemateButton";
 import { FilterHousemates } from "@/components/BillTable/FilterHousemates";
 import { ApplicableHousemateList } from "@/components/BillTable/ApplicableHousemateList";
+import { TextCell } from "@/components/common/TextCell";
 
 export type TBill = {
   id: number;
@@ -16,9 +17,10 @@ const columnHelper = createColumnHelper<TBill>();
 export const columns = [
   columnHelper.accessor("name", {
     header: "Name",
+    cell: TextCell,
   }),
   columnHelper.accessor("amount", {
-    cell: IncomeCell,
+    cell: CurrencyCell,
     id: "amount",
   }),
   columnHelper.accessor("applicableHousemates", {

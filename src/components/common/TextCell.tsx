@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 
-export const IncomeCell = ({
+export const TextCell = ({
   getValue,
   row,
   column,
@@ -27,18 +27,17 @@ export const IncomeCell = ({
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    const number = Number(value);
-    setValue(number);
+    setValue(value);
     tableMeta?.updateData(row.index, column.id, value, e.target.validity.valid);
   };
 
   return (
     <Input
-      type={"number"}
+      className={"w-24 md:w-52"}
+      type={"text"}
       value={value}
       onChange={handleOnChange}
       onBlur={onBlur}
-      min={0}
     />
   );
 };

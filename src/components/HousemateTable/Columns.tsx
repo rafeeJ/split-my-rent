@@ -1,10 +1,7 @@
-import {
-  ColumnDef,
-  ColumnHelper,
-  createColumnHelper,
-} from "@tanstack/react-table";
-import { IncomeCell } from "@/components/HousemateTable/IncomeCell";
+import { createColumnHelper } from "@tanstack/react-table";
+import { CurrencyCell } from "@/components/common/CurrencyCell";
 import { DeleteHousemateButton } from "@/components/HousemateTable/DeleteHousemateButton";
+import { TextCell } from "@/components/common/TextCell";
 
 export type THousemate = {
   id: number;
@@ -17,10 +14,11 @@ const columnHelper = createColumnHelper<THousemate>();
 
 export const columns = [
   columnHelper.accessor("name", {
-    header: "Name",
+    header: "name",
+    cell: TextCell,
   }),
   columnHelper.accessor("income", {
-    cell: IncomeCell,
+    cell: CurrencyCell,
     id: "income",
   }),
   columnHelper.display({
@@ -35,12 +33,12 @@ export const columns = [
       const proportion = (income / totalIncome) * 100;
 
       return (
-        <div>
+        <span className={"underline"}>
           {proportion.toLocaleString(undefined, {
             maximumFractionDigits: 2,
           })}
           %
-        </div>
+        </span>
       );
     },
   }),
