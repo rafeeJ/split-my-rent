@@ -15,7 +15,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { AddHousemateButton } from "@/components/HousemateTable/AddHousemateButton";
+import { AddRowButton } from "@/components/HousemateTable/AddRowButton";
+import { TBill } from "@/components/BillTable/Columns";
 
 interface DataTableProps {
   columns: ColumnDef<any, any>[];
@@ -46,9 +47,9 @@ export function BillTable({ columns, propData }: DataTableProps) {
         );
       },
       addRow: () => {
-        const newRow: THousemate = {
-          name: "Housemate",
-          income: 1000,
+        const newRow: TBill = {
+          name: "Bill",
+          amount: 500,
         };
         const setFunction = (old: any[]) => [...old, newRow];
         setData(setFunction);
@@ -109,7 +110,7 @@ export function BillTable({ columns, propData }: DataTableProps) {
         <TableFooter>
           <TableRow>
             <TableCell colSpan={columns.length} className="h-24 text-center">
-              <AddHousemateButton table={table} />
+              <AddRowButton table={table} />
             </TableCell>
           </TableRow>
         </TableFooter>

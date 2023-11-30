@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import { THousemate } from "@/components/HousemateTable/columns";
-import { AddHousemateButton } from "@/components/HousemateTable/AddHousemateButton";
+import { AddRowButton } from "@/components/HousemateTable/AddRowButton";
 
 interface DataTableProps {
   columns: ColumnDef<any, any>[];
@@ -112,7 +112,7 @@ export function HouseMateTable({ columns, propData }: DataTableProps) {
         <TableFooter>
           <TableRow>
             <TableCell colSpan={columns.length} className="h-24 text-center">
-              <AddHousemateButton table={table} />
+              <AddRowButton table={table} />
             </TableCell>
           </TableRow>
         </TableFooter>
