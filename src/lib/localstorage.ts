@@ -1,4 +1,4 @@
-import { THousemate } from "@/components/HousemateTable/columns";
+import { THousemate } from "@/components/HousemateTable/Columns";
 import { TBill } from "@/components/BillTable/Columns";
 
 export const defaultHousemates: THousemate[] = [

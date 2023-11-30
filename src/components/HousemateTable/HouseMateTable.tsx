@@ -17,9 +17,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Dispatch, SetStateAction } from "react";
-import { THousemate } from "@/components/HousemateTable/columns";
+import { THousemate } from "@/components/HousemateTable/Columns";
 import { AddRowButton } from "@/components/HousemateTable/AddRowButton";
-import { Button } from "@/components/ui/button";
 
 interface DataTableProps {
   columns: ColumnDef<any, any>[];

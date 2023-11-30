@@ -1,4 +1,4 @@
-import { THousemate } from "@/components/HousemateTable/columns";
+import { THousemate } from "@/components/HousemateTable/Columns";
 import { TBill } from "@/components/BillTable/Columns";
 import {
   Table,
@@ -8,15 +8,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Switch } from "@/components/ui/switch";
 
 interface IResultsTableProps {
   housemateData: THousemate[];
   billData: TBill[];
+  useProportions: boolean;
 }
 
 export const ResultsTable = ({
   housemateData,
   billData,
+  useProportions,
 }: IResultsTableProps) => {
   const calculateHousemateTotals = () => {
     // For each bill, we need to work out what proportion of the total bill each housemate should pay based on their income and whether they are applicable to the bill.
@@ -56,7 +59,9 @@ export const ResultsTable = ({
       );
       const housematePayments = bill.applicableHousemates.map((housemate) => {
         if (!housemate) return;
-        const proportion = housemate.income / totalApplicableIncome;
+        const proportion = useProportions
+          ? housemate.income / totalApplicableIncome
+          : 1 / bill.applicableHousemates.length;
         const amount = bill.amount * proportion;
         return {
           housemate,

@@ -11,16 +11,17 @@ import { useEffect, useState } from "react";
 import {
   columns as HousemateColumns,
   THousemate,
-} from "@/components/HousemateTable/columns";
+} from "@/components/HousemateTable/Columns";
 import { HouseMateTable } from "@/components/HousemateTable/HouseMateTable";
 import { columns as BillColumns, TBill } from "@/components/BillTable/Columns";
 import { BillTable } from "@/components/BillTable/BillTable";
-import { set } from "zod";
 import { ResultsTable } from "@/components/ResultsTable/ResultsTable";
 import { Separator } from "@/components/ui/separator";
 import { defaultBills, defaultHousemates } from "@/lib/localstorage";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 export default function Home({
   searchParams,
@@ -42,7 +43,6 @@ export default function Home({
     if (!housemates) return defaultHousemates;
     return JSON.parse(housemates);
   });
-
   const [bills, setBills] = useState<TBill[]>(() => {
     if (isServer) return [];
 
@@ -55,6 +55,7 @@ export default function Home({
     if (!bills) return defaultBills;
     return JSON.parse(bills);
   });
+  const [useProportions, setUseProportions] = useState(true);
 
   useEffect(() => {
     // when there is a change, store the data in local storage
@@ -104,12 +105,26 @@ export default function Home({
         <Separator className={"md:hidden"} />
 
         <Card className={"w-full md:col-span-2"}>
-          <CardHeader>
-            <CardTitle>Results</CardTitle>
-            <CardDescription>See the results here!</CardDescription>
+          <CardHeader className={"flex flex-row items-center justify-center"}>
+            <div>
+              <CardTitle>Results</CardTitle>
+              <CardDescription>See the results here!</CardDescription>
+            </div>
+            <div className={"flex-grow"} />
+            <div className={"flex items-center justify-center flex-col gap-1"}>
+              <Label>Equal Split?</Label>
+              <Switch
+                checked={!useProportions}
+                onCheckedChange={() => setUseProportions((old) => !old)}
+              />
+            </div>
           </CardHeader>
           <CardContent>
-            <ResultsTable housemateData={housemates} billData={bills} />
+            <ResultsTable
+              housemateData={housemates}
+              billData={bills}
+              useProportions={useProportions}
+            />
           </CardContent>
         </Card>
 

@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { THousemate } from "@/components/HousemateTable/columns";
+import { THousemate } from "@/components/HousemateTable/Columns";
 import { FilterIcon } from "lucide-react";
 
 export function FilterHousemates({ table, row }: any) {

@@ -5,7 +5,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { THousemate } from "@/components/HousemateTable/columns";
+import { THousemate } from "@/components/HousemateTable/Columns";
 import {
   Table,
   TableBody,
