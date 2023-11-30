@@ -16,20 +16,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { THousemate } from "@/components/HousemateTable/columns";
 import { AddRowButton } from "@/components/HousemateTable/AddRowButton";
 
 interface DataTableProps {
   columns: ColumnDef<any, any>[];
-  propData: any[];
+  data: THousemate[];
+  setData: Dispatch<SetStateAction<THousemate[]>>;
 }
 
-export function HouseMateTable({ columns, propData }: DataTableProps) {
-  const [data, setData] = useState(() => {
-    return propData;
-  });
-
+export function HouseMateTable({ columns, data, setData }: DataTableProps) {
   const table = useReactTable({
     data,
     columns,

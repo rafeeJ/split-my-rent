@@ -17,7 +17,7 @@ import { BillTable } from "@/components/BillTable/BillTable";
 import { set } from "zod";
 
 export default function Home() {
-  const [housemates] = useState<THousemate[]>([
+  const [housemates, setHousemates] = useState<THousemate[]>([
     { name: "John", income: 500 },
     { name: "Jane", income: 1000 },
   ]);
@@ -51,7 +51,11 @@ export default function Home() {
           <CardDescription>Monthly incomes too</CardDescription>
         </CardHeader>
         <CardContent>
-          <HouseMateTable columns={HousemateColumns} propData={housemates} />
+          <HouseMateTable
+            columns={HousemateColumns}
+            data={housemates}
+            setData={setHousemates}
+          />
         </CardContent>
       </Card>
 
@@ -62,6 +66,16 @@ export default function Home() {
         </CardHeader>
         <CardContent>
           <BillTable columns={BillColumns} data={bills} setData={setBills} />
+        </CardContent>
+      </Card>
+
+      <Card className={"w-full"}>
+        <CardHeader>
+          <CardTitle>Results</CardTitle>
+          <CardDescription>See the results here!</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p>Results go here!</p>
         </CardContent>
       </Card>
     </main>
