@@ -22,6 +22,10 @@ export const EditBillDialog = ({ table, row, getValue }: any) => {
     meta?.updateData(row.index, "splitProportionally", !splitProportionally);
   };
 
+  const handleDelete = () => {
+    meta?.removeRow(row.index);
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -55,8 +59,10 @@ export const EditBillDialog = ({ table, row, getValue }: any) => {
             />
           </div>
         </div>
-        <DialogFooter>
-          <Button variant={"destructive"}>Delete</Button>
+        <DialogFooter className={"gap-2"}>
+          <Button variant={"destructive"} onClick={handleDelete}>
+            Delete
+          </Button>
           <DialogClose asChild>
             <Button type="submit">Save changes</Button>
           </DialogClose>
