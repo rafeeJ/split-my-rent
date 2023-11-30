@@ -9,8 +9,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Info, ViewIcon } from "lucide-react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Info } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 
 interface IResultsTableProps {
   housemateData: THousemate[];
@@ -92,6 +99,17 @@ export const ResultsTable = ({
   };
 
   const housemateTotals = calculateHousemateTotals();
+  const sanitisedHousemateTotals = housemateTotals.map((housemate) => {
+    const total = housemate.bills.reduce((acc, bill) => {
+      if (!bill) return acc;
+      return acc + bill.amount;
+    }, 0);
+
+    return {
+      name: housemate.name,
+      value: parseFloat(total.toFixed(2)),
+    };
+  });
 
   return (
     <div className={"w-full"}>
@@ -162,6 +180,35 @@ export const ResultsTable = ({
                       </Button>
                     </DialogTrigger>
                     <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Detailed View</DialogTitle>
+                      </DialogHeader>
+                      <ResponsiveContainer width={"100%"} aspect={1}>
+                        <PieChart>
+                          <Pie
+                            data={sanitisedHousemateTotals}
+                            dataKey="value"
+                            nameKey="name"
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={60}
+                            outerRadius={80}
+                            fill="#82ca9d"
+                            label
+                          >
+                            {sanitisedHousemateTotals.map((entry, index) => (
+                              <Cell
+                                key={`cell-${index}`}
+                                fill={
+                                  entry.name === housemate.name
+                                    ? "#82ca9d"
+                                    : "#6a6a73"
+                                }
+                              />
+                            ))}
+                          </Pie>
+                        </PieChart>
+                      </ResponsiveContainer>
                       <DataTable />
                     </DialogContent>
                   </Dialog>
