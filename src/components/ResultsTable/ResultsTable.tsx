@@ -8,15 +8,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { PopoverClose } from "@radix-ui/react-popover";
 import { Button } from "@/components/ui/button";
 import { Info, ViewIcon } from "lucide-react";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 interface IResultsTableProps {
   housemateData: THousemate[];
@@ -160,18 +154,17 @@ export const ResultsTable = ({
               <TableRow key={idx}>
                 <TableCell>{housemate.name}</TableCell>
                 <TableCell className={"text-right"}>
-                  <Popover>
-                    <PopoverTrigger className={"font-bold underline"}>
+                  <Dialog>
+                    <DialogTrigger className={"font-bold underline"}>
                       <Button className={"gap-2"} variant={"outline"}>
                         {valueToDisplay}
                         <Info />
                       </Button>
-                    </PopoverTrigger>
-                    <PopoverContent>
-                      <PopoverClose />
+                    </DialogTrigger>
+                    <DialogContent>
                       <DataTable />
-                    </PopoverContent>
-                  </Popover>
+                    </DialogContent>
+                  </Dialog>
                 </TableCell>
               </TableRow>
             );
