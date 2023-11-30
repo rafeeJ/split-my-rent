@@ -33,7 +33,7 @@ export const columns = [
       const proportion = (income / totalIncome) * 100;
 
       return (
-        <span className={"underline"}>
+        <span>
           {proportion.toLocaleString(undefined, {
             maximumFractionDigits: 2,
           })}
