@@ -9,8 +9,8 @@ export const DeleteHousemateButton = ({ row, table }: any) => {
   };
 
   return (
-    <Button variant={"secondary"} onClick={removeRow}>
-      <DeleteIcon />
+    <Button variant={"destructive"} onClick={removeRow} size={"icon"}>
+      <DeleteIcon size={15} />
     </Button>
   );
 };

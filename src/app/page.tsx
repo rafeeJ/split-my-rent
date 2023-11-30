@@ -16,6 +16,7 @@ import { columns as BillColumns, TBill } from "@/components/BillTable/Columns";
 import { BillTable } from "@/components/BillTable/BillTable";
 import { set } from "zod";
 import { ResultsTable } from "@/components/ResultsTable/ResultsTable";
+import { Separator } from "@/components/ui/separator";
 
 export default function Home() {
   const [housemates, setHousemates] = useState<THousemate[]>([
@@ -54,34 +55,33 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-4 md:p-24 gap-y-2">
       <h1 className={"text-3xl"}>Split My Rent</h1>
       <h3 className={"text-2xl"}>A simple rent splitting app</h3>
-      <Card className={"w-full"}>
-        <CardHeader>
-          <CardTitle>Add housemates</CardTitle>
-          <CardDescription>Monthly incomes too</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <HouseMateTable
-            columns={HousemateColumns}
-            data={housemates}
-            setData={setHousemates}
-          />
-        </CardContent>
-      </Card>
+      <div className={"w-full"}>
+        <div className={"p-2"}>
+          <h1 className={"text-xl"}>Incomes</h1>
+          <h3 className={"text-md"}>Add your housemates here!</h3>
+        </div>
+        <HouseMateTable
+          columns={HousemateColumns}
+          data={housemates}
+          setData={setHousemates}
+        />
+      </div>
 
-      <Card className={"w-full"}>
-        <CardHeader>
-          <CardTitle>Add Bills</CardTitle>
-          <CardDescription>By the month!</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <BillTable
-            columns={BillColumns}
-            data={bills}
-            setData={setBills}
-            housemates={housemates}
-          />
-        </CardContent>
-      </Card>
+      <div className={"w-full"}>
+        <div className={"p-2"}>
+          <h1 className={"text-xl"}>Add Bills</h1>
+          <h3 className={"text-md"}>By the month!</h3>
+        </div>
+
+        <BillTable
+          columns={BillColumns}
+          data={bills}
+          setData={setBills}
+          housemates={housemates}
+        />
+      </div>
+
+      <Separator />
 
       <Card className={"w-full"}>
         <CardHeader>
