@@ -9,6 +9,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { PopoverClose } from "@radix-ui/react-popover";
+import { Button } from "@/components/ui/button";
+import { Info, ViewIcon } from "lucide-react";
+
 interface IResultsTableProps {
   housemateData: THousemate[];
   billData: TBill[];
@@ -18,10 +27,7 @@ export const ResultsTable = ({
   housemateData,
   billData,
 }: IResultsTableProps) => {
-  console.table(billData);
   const calculateHousemateTotals = () => {
-    // For each bill, we need to work out what proportion of the total bill each housemate should pay based on their income and whether they are applicable to the bill.
-
     const applicableBills = billData
       .map((bill) => {
         const applicableHousemates = bill.applicableHousemates.map((id) => {
@@ -60,30 +66,35 @@ export const ResultsTable = ({
           ? housemate.income / totalApplicableIncome
           : 1 / bill.applicableHousemates.length;
         const amount = bill.amount * proportion;
+
+        const billName = bill.name;
+
         return {
           housemate,
           amount,
+          billName,
         };
       });
       return housematePayments;
     });
 
-    const housemateTotals = housemateData.map((housemate) => {
+    // for each housemate, find the bills they are applicable for and group them
+    const splitBillsPerHousemate = housemateData.map((housemate) => {
       const bills = housematePayments.map((bill) => {
-        const housemateBill = bill.find((bill) => {
-          if (!bill) return;
-          return bill.housemate.id === housemate.id;
+        const billForHousemate = bill.find((b) => {
+          if (!b) return;
+          return b.housemate.id === housemate.id;
         });
-        return housemateBill?.amount || 0;
+        return billForHousemate;
       });
-      const total = bills.reduce((acc, bill) => acc + bill, 0);
       return {
+        id: housemate.id,
         name: housemate.name,
-        shareOfBills: total,
+        bills,
       };
     });
 
-    return housemateTotals;
+    return splitBillsPerHousemate;
   };
 
   const housemateTotals = calculateHousemateTotals();
@@ -94,7 +105,7 @@ export const ResultsTable = ({
         <TableHeader>
           <TableRow>
             <TableHead>Housemate</TableHead>
-            <TableHead>Share of bills</TableHead>
+            <TableHead className={"text-right"}>Share of bills</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -105,17 +116,66 @@ export const ResultsTable = ({
               </TableCell>
             </TableRow>
           )}
-          {housemateTotals.map((housemate, idx) => (
-            <TableRow key={idx}>
-              <TableCell>{housemate.name}</TableCell>
-              <TableCell>
-                {housemate.shareOfBills.toLocaleString(undefined, {
-                  style: "currency",
-                  currency: "GBP",
-                })}
-              </TableCell>
-            </TableRow>
-          ))}
+          {housemateTotals.map((housemate, idx) => {
+            const total = housemate.bills.reduce((acc, bill) => {
+              if (!bill) return acc;
+              return acc + bill.amount;
+            }, 0);
+
+            const valueToDisplay = total.toLocaleString(undefined, {
+              style: "currency",
+              currency: "GBP",
+            });
+
+            const DataTable = () => {
+              return (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Bill</TableHead>
+                      <TableHead>Amount</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {housemate.bills.map((bill, idx) => {
+                      if (!bill) return;
+                      return (
+                        <TableRow key={idx}>
+                          <TableCell>{bill.billName}</TableCell>
+                          <TableCell>
+                            {bill.amount.toLocaleString(undefined, {
+                              style: "currency",
+                              currency: "GBP",
+                            })}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              );
+            };
+
+            return (
+              <TableRow key={idx}>
+                <TableCell>{housemate.name}</TableCell>
+                <TableCell className={"text-right"}>
+                  <Popover>
+                    <PopoverTrigger className={"font-bold underline"}>
+                      <Button className={"gap-2"} variant={"outline"}>
+                        {valueToDisplay}
+                        <Info />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <PopoverClose />
+                      <DataTable />
+                    </PopoverContent>
+                  </Popover>
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>
