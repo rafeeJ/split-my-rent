@@ -19,6 +19,7 @@ import {
 import { Dispatch, SetStateAction } from "react";
 import { THousemate } from "@/components/HousemateTable/columns";
 import { AddRowButton } from "@/components/HousemateTable/AddRowButton";
+import { Button } from "@/components/ui/button";
 
 interface DataTableProps {
   columns: ColumnDef<any, any>[];
@@ -111,7 +112,10 @@ export function HouseMateTable({ columns, data, setData }: DataTableProps) {
         <TableFooter>
           <TableRow>
             <TableCell colSpan={columns.length} className="h-24 text-center">
-              <AddRowButton table={table} />
+              <div className={"flex gap-2 items-center justify-center"}>
+                <AddRowButton table={table} />
+                <Button>Save Housemates</Button>
+              </div>
             </TableCell>
           </TableRow>
         </TableFooter>

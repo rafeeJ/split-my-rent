@@ -113,7 +113,7 @@ export default function Home({
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className={"w-full md:col-span-2"}>
           <CardHeader>
             <CardTitle>Share with housemates</CardTitle>
           </CardHeader>

@@ -4,6 +4,7 @@ import "./globals.css";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/Layout/Navbar";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 
 const fontSans = FontSans({
   variable: "--font-sans",
@@ -25,8 +26,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           fontSans.variable,
         )}
       >
-        <Navbar />
-        {children}
+        <ThemeProvider
+          attribute={"class"}
+          defaultTheme={"system"}
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Navbar />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

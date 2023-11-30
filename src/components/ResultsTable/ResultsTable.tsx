@@ -20,8 +20,6 @@ export const ResultsTable = ({
 }: IResultsTableProps) => {
   const calculateHousemateTotals = () => {
     // For each bill, we need to work out what proportion of the total bill each housemate should pay based on their income and whether they are applicable to the bill.
-    console.table(housemateData);
-    console.table(billData);
 
     const applicableBills = billData
       .map((bill) => {
@@ -67,7 +65,6 @@ export const ResultsTable = ({
       });
       return housematePayments;
     });
-    console.log(housematePayments);
 
     const housemateTotals = housemateData.map((housemate) => {
       const bills = housematePayments.map((bill) => {
