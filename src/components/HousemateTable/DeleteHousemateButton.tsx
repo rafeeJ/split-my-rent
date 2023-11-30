@@ -8,8 +8,15 @@ export const DeleteHousemateButton = ({ row, table }: any) => {
     meta?.removeRow(row.index);
   };
 
+  const disabled = table.getRowModel().rows.length === 1;
+
   return (
-    <Button variant={"destructive"} onClick={removeRow} size={"icon"}>
+    <Button
+      variant={"destructive"}
+      onClick={removeRow}
+      size={"icon"}
+      disabled={disabled}
+    >
       <DeleteIcon size={15} />
     </Button>
   );

@@ -17,18 +17,24 @@ export const defaultHousemates: THousemate[] = [
 export const defaultBills: TBill[] = [
   {
     id: 1,
+    name: "Rent",
+    amount: 1250,
+    applicableHousemates: [1, 2],
+  },
+  {
+    id: 2,
     name: "Electricity",
     amount: 100,
     applicableHousemates: [1, 2],
   },
   {
-    id: 2,
+    id: 3,
     name: "Water",
     amount: 50,
     applicableHousemates: [1, 2],
   },
   {
-    id: 3,
+    id: 4,
     name: "Internet",
     amount: 50,
     applicableHousemates: [1, 2],
