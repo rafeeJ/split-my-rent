@@ -4,12 +4,14 @@ import { DeleteHousemateButton } from "@/components/HousemateTable/DeleteHousema
 import { FilterHousemates } from "@/components/BillTable/FilterHousemates";
 import { ApplicableHousemateList } from "@/components/BillTable/ApplicableHousemateList";
 import { TextCell } from "@/components/common/TextCell";
+import { EditBillDialog } from "@/components/BillTable/EditBillDialog";
 
 export type TBill = {
   id: number;
   name: string;
   amount: number;
   applicableHousemates: number[];
+  splitProportionally: boolean;
 };
 
 const columnHelper = createColumnHelper<TBill>();
@@ -23,7 +25,10 @@ export const columns = [
     cell: CurrencyCell,
     id: "amount",
   }),
-
+  columnHelper.display({
+    id: "edit",
+    cell: EditBillDialog,
+  }),
   columnHelper.display({
     id: "delete",
     cell: DeleteHousemateButton,
@@ -32,8 +37,8 @@ export const columns = [
     header: "Applicable Housemates",
     cell: ApplicableHousemateList,
   }),
-  columnHelper.display({
-    id: "filter",
-    cell: FilterHousemates,
+  columnHelper.accessor("splitProportionally", {
+    header: "Split Proportionally",
+    cell: TextCell,
   }),
 ];

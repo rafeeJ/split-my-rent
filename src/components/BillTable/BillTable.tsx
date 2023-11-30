@@ -3,6 +3,7 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
+  VisibilityState,
 } from "@tanstack/react-table";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { THousemate } from "@/components/HousemateTable/Columns";
@@ -31,10 +32,22 @@ export function BillTable({
   setData,
   housemates,
 }: DataTableProps) {
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+    name: true,
+    amount: true,
+    delete: true,
+    applicableHousemates: false,
+    splitProportionally: false,
+  });
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    state: {
+      columnVisibility,
+    },
     meta: {
       updateData: (rowIndex: number, columnId: string, value: string) => {
         setData((old: TBill[]) =>
@@ -57,6 +70,7 @@ export function BillTable({
           name: "Bill",
           amount: 500,
           applicableHousemates: housemates.map((hm) => hm.id),
+          splitProportionally: false,
         };
         const setFunction = (old: any[]) => [...old, newRow];
         setData(setFunction);
