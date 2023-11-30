@@ -20,23 +20,27 @@ export const defaultBills: TBill[] = [
     name: "Rent",
     amount: 1250,
     applicableHousemates: [1, 2],
+    splitProportionally: true,
   },
   {
     id: 2,
     name: "Electricity",
     amount: 100,
     applicableHousemates: [1, 2],
+    splitProportionally: false,
   },
   {
     id: 3,
     name: "Water",
     amount: 50,
     applicableHousemates: [1, 2],
+    splitProportionally: false,
   },
   {
     id: 4,
     name: "Internet",
     amount: 50,
     applicableHousemates: [1, 2],
+    splitProportionally: false,
   },
 ];

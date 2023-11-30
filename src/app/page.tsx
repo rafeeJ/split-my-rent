@@ -20,8 +20,6 @@ import { Separator } from "@/components/ui/separator";
 import { defaultBills, defaultHousemates } from "@/lib/localstorage";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 
 export default function Home({
   searchParams,
@@ -55,7 +53,6 @@ export default function Home({
     if (!bills) return defaultBills;
     return JSON.parse(bills);
   });
-  const [useProportions, setUseProportions] = useState(true);
 
   useEffect(() => {
     // when there is a change, store the data in local storage
@@ -105,26 +102,12 @@ export default function Home({
         <Separator className={"md:hidden"} />
 
         <Card className={"w-full md:col-span-2"}>
-          <CardHeader className={"flex flex-row items-center justify-center"}>
-            <div>
-              <CardTitle>Results</CardTitle>
-              <CardDescription>See the results here!</CardDescription>
-            </div>
-            <div className={"flex-grow"} />
-            <div className={"flex items-center justify-center flex-col gap-1"}>
-              <Label>Equal Split?</Label>
-              <Switch
-                checked={!useProportions}
-                onCheckedChange={() => setUseProportions((old) => !old)}
-              />
-            </div>
+          <CardHeader>
+            <CardTitle>Results</CardTitle>
+            <CardDescription>See the results here!</CardDescription>
           </CardHeader>
           <CardContent>
-            <ResultsTable
-              housemateData={housemates}
-              billData={bills}
-              useProportions={useProportions}
-            />
+            <ResultsTable housemateData={housemates} billData={bills} />
           </CardContent>
         </Card>
 

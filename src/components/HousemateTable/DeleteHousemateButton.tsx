@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { DeleteIcon } from "lucide-react";
+import { CrossIcon } from "lucide-react";
 
 export const DeleteHousemateButton = ({ row, table }: any) => {
   const meta = table.options.meta;
@@ -17,7 +17,7 @@ export const DeleteHousemateButton = ({ row, table }: any) => {
       size={"icon"}
       disabled={disabled}
     >
-      <DeleteIcon size={15} />
+      <CrossIcon size={15} className={"rotate-45"} />
     </Button>
   );
 };

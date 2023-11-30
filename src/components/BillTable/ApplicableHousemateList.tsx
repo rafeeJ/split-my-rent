@@ -3,7 +3,7 @@ import { FilterHousemates } from "@/components/BillTable/FilterHousemates";
 
 export const ApplicableHousemateList = ({ table, row, getValue }: any) => {
   const meta = table.options.meta;
-  const applicableHousemates = getValue();
+  const applicableHousemates = row.getValue("applicableHousemates");
 
   const isEveryoneApplicable =
     applicableHousemates.length === meta?.housemates.length;
