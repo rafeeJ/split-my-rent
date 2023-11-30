@@ -23,6 +23,11 @@ export const columns = [
     cell: CurrencyCell,
     id: "amount",
   }),
+
+  columnHelper.display({
+    id: "delete",
+    cell: DeleteHousemateButton,
+  }),
   columnHelper.accessor("applicableHousemates", {
     header: "Applicable Housemates",
     cell: ApplicableHousemateList,
@@ -30,9 +35,5 @@ export const columns = [
   columnHelper.display({
     id: "filter",
     cell: FilterHousemates,
-  }),
-  columnHelper.display({
-    id: "delete",
-    cell: DeleteHousemateButton,
   }),
 ];

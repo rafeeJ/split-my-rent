@@ -114,7 +114,7 @@ export function HouseMateTable({ columns, data, setData }: DataTableProps) {
             <TableCell colSpan={columns.length} className="h-24 text-center">
               <div className={"flex gap-2 items-center justify-center"}>
                 <AddRowButton table={table} />
-                <Button>Save Housemates</Button>
+                {/*<Button>Save Housemates</Button>*/}
               </div>
             </TableCell>
           </TableRow>
