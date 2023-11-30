@@ -22,9 +22,15 @@ interface DataTableProps {
   columns: ColumnDef<any, any>[];
   data: TBill[];
   setData: Dispatch<SetStateAction<TBill[]>>;
+  housemates: THousemate[];
 }
 
-export function BillTable({ columns, data, setData }: DataTableProps) {
+export function BillTable({
+  columns,
+  data,
+  setData,
+  housemates,
+}: DataTableProps) {
   const table = useReactTable({
     data,
     columns,
@@ -43,10 +49,14 @@ export function BillTable({ columns, data, setData }: DataTableProps) {
           }),
         );
       },
+      housemates,
       addRow: () => {
+        const maxId = Math.max(...data.map((row) => row.id));
         const newRow: TBill = {
+          id: maxId + 1,
           name: "Bill",
           amount: 500,
+          applicableHousemates: housemates.map((hm) => hm.id),
         };
         const setFunction = (old: any[]) => [...old, newRow];
         setData(setFunction);
@@ -58,6 +68,34 @@ export function BillTable({ columns, data, setData }: DataTableProps) {
       },
     },
   });
+
+  useEffect(() => {
+    // if a housemate is removed, remove them from all bills
+    const newBills = data.map((bill) => {
+      const newApplicableHousemates = bill.applicableHousemates.filter((hmId) =>
+        housemates.some((hm) => hm.id === hmId),
+      );
+      return {
+        ...bill,
+        applicableHousemates: newApplicableHousemates,
+      };
+    });
+
+    setData(newBills);
+  }, [housemates]);
+
+  useEffect(() => {
+    // if housemate is added, add them to all bills
+    const newBills = data.map((bill) => {
+      const applicableHousemates = housemates.map((hm) => hm.id);
+      return {
+        ...bill,
+        applicableHousemates,
+      };
+    });
+
+    setData(newBills);
+  }, [housemates]);
 
   if (!data) return null;
 

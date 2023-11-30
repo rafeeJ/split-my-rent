@@ -38,6 +38,7 @@ export const IncomeCell = ({
       value={value}
       onChange={handleOnChange}
       onBlur={onBlur}
+      min={0}
     />
   );
 };

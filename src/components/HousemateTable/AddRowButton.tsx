@@ -4,5 +4,9 @@ import { Table } from "@tanstack/table-core";
 
 export const AddRowButton = ({ table }: any) => {
   const meta = table.options.meta;
-  return <Button onClick={() => meta?.addRow()}>Add row</Button>;
+  return (
+    <Button variant={"outline"} onClick={() => meta?.addRow()}>
+      Add row
+    </Button>
+  );
 };

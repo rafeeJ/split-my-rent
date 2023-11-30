@@ -46,7 +46,9 @@ export function HouseMateTable({ columns, data, setData }: DataTableProps) {
         );
       },
       addRow: () => {
+        const maxId = Math.max(...data.map((row) => row.id));
         const newRow: THousemate = {
+          id: maxId + 1,
           name: "Housemate",
           income: 1000,
         };

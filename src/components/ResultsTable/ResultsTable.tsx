@@ -19,34 +19,72 @@ export const ResultsTable = ({
   billData,
 }: IResultsTableProps) => {
   const calculateHousemateTotals = () => {
-    // total income
-    const totalIncome = housemateData.reduce((acc, housemate) => {
-      return acc + housemate.income;
-    }, 0);
+    // For each bill, we need to work out what proportion of the total bill each housemate should pay based on their income and whether they are applicable to the bill.
+    console.table(housemateData);
+    console.table(billData);
 
-    const housemateWithProportions = housemateData.map((housemate) => {
-      const proportion = (housemate.income / totalIncome) * 100;
+    const applicableBills = billData
+      .map((bill) => {
+        const applicableHousemates = bill.applicableHousemates.map((id) => {
+          const housemate = housemateData.find((hm) => hm.id === id);
+          if (!housemate) return;
+          housemate.income = Number(housemate.income);
+          return housemate;
+        });
+        return {
+          ...bill,
+          applicableHousemates,
+        };
+      })
+      .map((bill) => {
+        const applicableHousemates = bill.applicableHousemates.filter(
+          (hm) => hm !== undefined,
+        );
+        return {
+          ...bill,
+          applicableHousemates,
+        };
+      });
+
+    // if a bill has an applicable housemate that doesn't exist, then we should ignore it.
+
+    const housematePayments = applicableBills.map((bill) => {
+      const totalApplicableIncome = bill.applicableHousemates.reduce(
+        (acc, housemate) => {
+          if (!housemate) return acc;
+          return acc + housemate.income;
+        },
+        0,
+      );
+      const housematePayments = bill.applicableHousemates.map((housemate) => {
+        if (!housemate) return;
+        const proportion = housemate.income / totalApplicableIncome;
+        const amount = bill.amount * proportion;
+        return {
+          housemate,
+          amount,
+        };
+      });
+      return housematePayments;
+    });
+    console.log(housematePayments);
+
+    const housemateTotals = housemateData.map((housemate) => {
+      const bills = housematePayments.map((bill) => {
+        const housemateBill = bill.find((bill) => {
+          if (!bill) return;
+          return bill.housemate.id === housemate.id;
+        });
+        return housemateBill?.amount || 0;
+      });
+      const total = bills.reduce((acc, bill) => acc + bill, 0);
       return {
-        ...housemate,
-        proportion,
+        name: housemate.name,
+        shareOfBills: total,
       };
     });
 
-    const totalBills = billData.reduce((acc, bill) => {
-      return acc + bill.amount;
-    }, 0);
-
-    const housemateWithProportionalBills = housemateWithProportions.map(
-      (housemate) => {
-        const shareOfBills = (housemate.proportion / 100) * totalBills;
-        return {
-          ...housemate,
-          shareOfBills,
-        };
-      },
-    );
-
-    return housemateWithProportionalBills;
+    return housemateTotals;
   };
 
   const housemateTotals = calculateHousemateTotals();

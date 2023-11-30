@@ -7,6 +7,7 @@ import { IncomeCell } from "@/components/HousemateTable/IncomeCell";
 import { DeleteHousemateButton } from "@/components/HousemateTable/DeleteHousemateButton";
 
 export type THousemate = {
+  id: number;
   name: string;
   income: number;
   proportion?: string;

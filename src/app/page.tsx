@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   columns as HousemateColumns,
   THousemate,
@@ -19,26 +19,34 @@ import { ResultsTable } from "@/components/ResultsTable/ResultsTable";
 
 export default function Home() {
   const [housemates, setHousemates] = useState<THousemate[]>([
-    { name: "John", income: 500 },
-    { name: "Jane", income: 1000 },
+    { id: 0, name: "John", income: 500 },
+    { id: 1, name: "Jane", income: 1000 },
   ]);
 
   const [bills, setBills] = useState<TBill[]>([
     {
+      id: 0,
       name: "Rent",
       amount: 1000,
+      applicableHousemates: [0, 1],
     },
     {
+      id: 1,
       name: "Water",
       amount: 50,
+      applicableHousemates: [0, 1],
     },
     {
+      id: 2,
       name: "Electricity",
       amount: 100,
+      applicableHousemates: [0, 1],
     },
     {
+      id: 3,
       name: "Internet",
       amount: 50,
+      applicableHousemates: [0, 1],
     },
   ]);
 
@@ -66,7 +74,12 @@ export default function Home() {
           <CardDescription>By the month!</CardDescription>
         </CardHeader>
         <CardContent>
-          <BillTable columns={BillColumns} data={bills} setData={setBills} />
+          <BillTable
+            columns={BillColumns}
+            data={bills}
+            setData={setBills}
+            housemates={housemates}
+          />
         </CardContent>
       </Card>
 
