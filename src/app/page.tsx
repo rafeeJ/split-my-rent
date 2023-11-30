@@ -15,6 +15,7 @@ import { HouseMateTable } from "@/components/HousemateTable/HouseMateTable";
 import { columns as BillColumns, TBill } from "@/components/BillTable/Columns";
 import { BillTable } from "@/components/BillTable/BillTable";
 import { set } from "zod";
+import { ResultsTable } from "@/components/ResultsTable/ResultsTable";
 
 export default function Home() {
   const [housemates, setHousemates] = useState<THousemate[]>([
@@ -75,7 +76,7 @@ export default function Home() {
           <CardDescription>See the results here!</CardDescription>
         </CardHeader>
         <CardContent>
-          <p>Results go here!</p>
+          <ResultsTable housemateData={housemates} billData={bills} />
         </CardContent>
       </Card>
     </main>
