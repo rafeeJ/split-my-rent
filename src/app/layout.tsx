@@ -3,6 +3,7 @@ import { Ubuntu as FontSans } from "next/font/google";
 import "./globals.css";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { Navbar } from "@/components/Layout/Navbar";
 
 const fontSans = FontSans({
   variable: "--font-sans",
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           fontSans.variable,
         )}
       >
+        <Navbar />
         {children}
       </body>
     </html>
