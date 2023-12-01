@@ -17,7 +17,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
+import {
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
+import { Badge } from "@/components/ui/badge";
 
 interface IResultsTableProps {
   housemateData: THousemate[];
@@ -139,6 +147,24 @@ export const ResultsTable = ({
               currency: "GBP",
             });
 
+            const getRandomPurple = () => {
+              const red = Math.floor(Math.random() * 256);
+              const blue = Math.floor(Math.random() * 256);
+              const green = 128;
+
+              return `rgb(${red}, ${green}, ${blue})`;
+            };
+
+            const sanitisedBillSplit = housemate.bills.map((bill) => {
+              const color = getRandomPurple();
+              if (!bill) return;
+              return {
+                name: bill.billName,
+                value: parseFloat(bill.amount.toFixed(2)),
+                color,
+              };
+            });
+
             const DataTable = () => {
               return (
                 <Table>
@@ -149,13 +175,23 @@ export const ResultsTable = ({
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {housemate.bills.map((bill, idx) => {
+                    {sanitisedBillSplit.map((bill, idx) => {
                       if (!bill) return;
+
+                      const color = bill.color;
+                      console.log(color);
                       return (
                         <TableRow key={idx}>
-                          <TableCell>{bill.billName}</TableCell>
+                          <TableCell style={{ color }}>
+                            <Badge
+                              style={{ backgroundColor: color }}
+                              className={"mr-2"}
+                            >
+                              {bill.name}
+                            </Badge>
+                          </TableCell>
                           <TableCell>
-                            {bill.amount.toLocaleString(undefined, {
+                            {bill.value.toLocaleString(undefined, {
                               style: "currency",
                               currency: "GBP",
                             })}
@@ -179,36 +215,66 @@ export const ResultsTable = ({
                         <Info />
                       </Button>
                     </DialogTrigger>
-                    <DialogContent>
+                    <DialogContent
+                      className={"flex flex-col justify-center items-center"}
+                    >
                       <DialogHeader>
                         <DialogTitle>Detailed View</DialogTitle>
                       </DialogHeader>
-                      <ResponsiveContainer width={"100%"} aspect={1}>
-                        <PieChart>
-                          <Pie
-                            data={sanitisedHousemateTotals}
-                            dataKey="value"
-                            nameKey="name"
-                            cx="50%"
-                            cy="50%"
-                            innerRadius={60}
-                            outerRadius={80}
-                            fill="#82ca9d"
-                            label
-                          >
-                            {sanitisedHousemateTotals.map((entry, index) => (
-                              <Cell
-                                key={`cell-${index}`}
-                                fill={
-                                  entry.name === housemate.name
-                                    ? "#82ca9d"
-                                    : "#6a6a73"
-                                }
-                              />
-                            ))}
-                          </Pie>
-                        </PieChart>
-                      </ResponsiveContainer>
+                      <div className={"flex flex-row"}>
+                        <ResponsiveContainer width={200} aspect={1}>
+                          <PieChart>
+                            <Tooltip />
+                            <Legend verticalAlign={"bottom"} height={18} />
+
+                            <Pie
+                              data={sanitisedHousemateTotals}
+                              dataKey="value"
+                              nameKey="name"
+                              innerRadius={20}
+                              outerRadius={40}
+                              fill="#82ca9d"
+                              label
+                            >
+                              {sanitisedHousemateTotals.map((entry, index) => {
+                                return (
+                                  <Cell
+                                    key={`cell-${index}`}
+                                    fill={
+                                      entry.name === housemate.name
+                                        ? "#8884d8"
+                                        : "#6a6a73"
+                                    }
+                                  />
+                                );
+                              })}
+                            </Pie>
+                          </PieChart>
+                        </ResponsiveContainer>
+                        <ResponsiveContainer width={200} aspect={1}>
+                          <PieChart>
+                            <Tooltip />
+                            <Legend verticalAlign={"bottom"} height={18} />
+                            <Pie
+                              dataKey="value"
+                              data={sanitisedBillSplit}
+                              nameKey="name"
+                              innerRadius={20}
+                              outerRadius={40}
+                            >
+                              {sanitisedBillSplit.map((entry, index) => {
+                                if (!entry) return;
+                                return (
+                                  <Cell
+                                    key={`cell-${index}`}
+                                    fill={entry.color}
+                                  />
+                                );
+                              })}
+                            </Pie>
+                          </PieChart>
+                        </ResponsiveContainer>
+                      </div>
                       <DataTable />
                     </DialogContent>
                   </Dialog>
