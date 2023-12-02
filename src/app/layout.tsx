@@ -15,6 +15,9 @@ const fontSans = FontSans({
 export const metadata: Metadata = {
   title: "Split My Rent",
   description: "Easy bill splitting for housemates",
+  other: {
+    "google-adsense-account": "ca-pub-0957049115549750",
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
