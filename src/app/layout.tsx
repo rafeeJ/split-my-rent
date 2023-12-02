@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/Layout/Navbar";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
+import { UserInformationProvider } from "@/contexts/UserInformationContext";
 
 const fontSans = FontSans({
   variable: "--font-sans",
@@ -36,10 +37,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           enableSystem
           disableTransitionOnChange
         >
-          <CurrencyProvider>
-            <Navbar />
-            {children}
-          </CurrencyProvider>
+          <UserInformationProvider>
+            <CurrencyProvider>
+              <Navbar />
+              {children}
+            </CurrencyProvider>
+          </UserInformationProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -20,6 +20,7 @@ import {
 import { ResultsTable } from "@/components/ResultsTable/ResultsTable";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useUserInformationContext } from "@/contexts/UserInformationContext";
 
 export const HomeLayout = ({
   housematesFromUrl,
@@ -28,39 +29,24 @@ export const HomeLayout = ({
   housematesFromUrl?: THousemate[];
   billsFromUrl?: TBill[];
 }) => {
-  const isServer = typeof window === "undefined";
   const [isClient, setIsClient] = useState(false);
   useEffect(() => setIsClient(true), []);
 
-  const [shareableUrlState, setShareableUrlState] = useState("");
-  const [housemates, setHousemates] = useState<THousemate[]>(() => {
-    if (isServer) return defaultHousemates;
-
-    if (housematesFromUrl) {
-      return housematesFromUrl;
-    }
-
-    const housematesFromStorage = localStorage.getItem("housemates");
-    if (!housematesFromStorage) return defaultHousemates;
-    return JSON.parse(housematesFromStorage);
-  });
-  const [bills, setBills] = useState<TBill[]>(() => {
-    if (isServer) return defaultBills;
-
-    if (billsFromUrl) {
-      return billsFromUrl;
-    }
-
-    const billsFromStorage = localStorage.getItem("bills");
-    if (!billsFromStorage) return defaultBills;
-    return JSON.parse(billsFromStorage);
-  });
+  const { housemates, bills, setBills, setHousemates } =
+    useUserInformationContext();
 
   useEffect(() => {
-    // when there is a change, store the data in local storage
-    localStorage.setItem("housemates", JSON.stringify(housemates));
-    localStorage.setItem("bills", JSON.stringify(bills));
+    if (housematesFromUrl) {
+      setHousemates(housematesFromUrl);
+    }
+    if (billsFromUrl) {
+      setBills(billsFromUrl);
+    }
+  }, [housematesFromUrl, billsFromUrl]);
 
+  const [shareableUrlState, setShareableUrlState] = useState("");
+
+  useEffect(() => {
     const shareableSearchParam = `?housemates=${encodeURIComponent(
       JSON.stringify(housemates),
     )}&bills=${encodeURIComponent(JSON.stringify(bills))}`;
