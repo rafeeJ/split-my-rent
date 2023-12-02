@@ -10,12 +10,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MenuIcon, SettingsIcon } from "lucide-react";
+import { ChevronDownIcon, MenuIcon, SettingsIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { useCurrencyContext } from "@/contexts/CurrencyContext";
 import { TCurrency } from "@/types/types";
+import Link from "next/link";
 
 export const Navbar = () => {
   const handleReset = () => {
@@ -41,13 +42,21 @@ export const Navbar = () => {
   };
 
   return (
-    <div className={"flex flex-row items-center bg-secondary px-10"}>
-      <h1 className={"text-2xl p-2"}>💸 Split My Rent</h1>
+    <div className={"flex flex-row items-center bg-secondary md:px-10"}>
+      <Link href={"/"} passHref>
+        <h1 className={"text-2xl p-2"}>💸 Split My Rent</h1>
+      </Link>
       <div className={"grow"} />
+      <Link href={"/blog"} passHref className={"underline"}>
+        <Button variant={"ghost"} className={"btn btn-primary underline"}>
+          Blog
+        </Button>
+      </Link>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant={"ghost"} className={"btn btn-primary"}>
             {currency}
+            <ChevronDownIcon size={15} className={"ml-1"} />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
@@ -71,7 +80,7 @@ export const Navbar = () => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant={"ghost"} className={"btn btn-primary"}>
-            <SettingsIcon />
+            <SettingsIcon size={20} />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
