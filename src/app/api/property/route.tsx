@@ -49,13 +49,13 @@ export async function GET(request: NextRequest) {
       },
     } = propertyData;
 
-    if (channel !== "RES_LET") {
-      console.log(primaryPrice, displayAddress);
-      return NextResponse.json({
-        message: "Not a rental property",
-        property: propertyData,
-      });
-    }
+    // if (channel !== "RES_LET") {
+    //   console.log(primaryPrice, displayAddress);
+    //   return NextResponse.json({
+    //     message: "Not a rental property",
+    //     property: propertyData,
+    //   });
+    // }
 
     const property = {
       price: primaryPrice,
