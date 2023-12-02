@@ -35,14 +35,14 @@ export const RightmoveForm = ({
   }, [state.property]);
 
   const handleChange = (e: any) => {
-    setMonthlyRent(Number(e.target.value));
+    setMonthlyRent(e.target.value);
   };
 
   return (
     <Tabs defaultValue="manual">
       <TabsList>
         <TabsTrigger value="manual">Manual</TabsTrigger>
-        <TabsTrigger value="rightmove">Rightmove</TabsTrigger>
+        {/*<TabsTrigger value="rightmove">Rightmove</TabsTrigger>*/}
       </TabsList>
       <TabsContent value="manual">
         <Card>
@@ -53,6 +53,7 @@ export const RightmoveForm = ({
             <div className={"grid gap-2"}>
               <Label>Monthly Rent</Label>
               <Input
+                min={0}
                 type={"number"}
                 placeholder="£2,350"
                 name={"price"}
