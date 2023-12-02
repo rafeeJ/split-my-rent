@@ -41,6 +41,8 @@ export async function GET(request: NextRequest) {
 
     await browser.close();
 
+    return NextResponse.json({ message: "Success", property: propertyData });
+
     const {
       propertyData: {
         prices: { primaryPrice },
@@ -49,13 +51,13 @@ export async function GET(request: NextRequest) {
       },
     } = propertyData;
 
-    // if (channel !== "RES_LET") {
-    //   console.log(primaryPrice, displayAddress);
-    //   return NextResponse.json({
-    //     message: "Not a rental property",
-    //     property: propertyData,
-    //   });
-    // }
+    if (channel !== "RES_LET") {
+      console.log(primaryPrice, displayAddress);
+      return NextResponse.json({
+        message: "Not a rental property",
+        property: propertyData,
+      });
+    }
 
     const property = {
       price: primaryPrice,
@@ -63,10 +65,13 @@ export async function GET(request: NextRequest) {
     };
 
     return NextResponse.json({ message: "Success", property });
-  } catch (error) {
-    return NextResponse.json({
-      message: "Error fetching data",
-      property: null,
-    });
+  } catch (e: any) {
+    return NextResponse.json(
+      {
+        message: e.message || "Error",
+        property: null,
+      },
+      { status: 500 },
+    );
   }
 }
