@@ -17,15 +17,19 @@ export const getRightmoveData = async (prevState: any, formData: FormData) => {
     },
   });
 
-  // if (res.status === 401) {
-  //   return { message: "Not a rental property" };
-  // }
-  //
-  // if (res.status !== 200) {
-  //   return { message: "Error fetching data" };
-  // }
+  const data = await res.json();
 
-  const { property } = await res.json();
+  const { message } = data;
 
-  return { message: "Success", property };
+  if (res.status === 401) {
+    return { message };
+  }
+
+  if (res.status !== 200) {
+    return { message };
+  }
+
+  const { property } = data;
+
+  return { message, property };
 };
