@@ -68,7 +68,7 @@ export function BillTable({
         const newRow: TBill = {
           id: maxId + 1,
           name: "Bill",
-          amount: 500,
+          amount: 100,
           applicableHousemates: housemates.map((hm) => hm.id),
           splitProportionally: false,
         };
