@@ -30,6 +30,7 @@ export const RightmoveForm = ({
     if (state.property) {
       const price = state.property.price.replace(/[^0-9]/g, "");
       setMonthlyRent(Number(price));
+      console.error(state.property);
     }
   }, [state.property]);
 
