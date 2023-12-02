@@ -13,6 +13,7 @@ import { useFormState } from "react-dom";
 import { getRightmoveData } from "@/actions";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SubmitUrlButton } from "@/components/Affordability/SubmitUrlButton";
 
 export const RightmoveForm = ({
   monthlyRent,
@@ -83,7 +84,7 @@ export const RightmoveForm = ({
               )}
             </CardContent>
             <CardFooter>
-              <Button type={"submit"}>Submit</Button>
+              <SubmitUrlButton />
               {state.message}
             </CardFooter>
           </Card>
