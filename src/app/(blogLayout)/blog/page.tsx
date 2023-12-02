@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import NavigateToAppButton from "@/components/Blog/NavigateToAppButton";
+import { format, parse } from "date-fns";
 
 export default async function Blog() {
   const blogs = await getAllArticles();
@@ -31,7 +32,12 @@ export default async function Blog() {
                   <CardDescription>{blog.readingTime}</CardDescription>
                 </CardHeader>
                 <CardContent>{blog.meta.description}</CardContent>
-                <CardFooter>{blog.meta.date}</CardFooter>
+                <CardFooter>
+                  {format(
+                    parse(blog.meta.date, "dd/MM/yyyy", new Date()),
+                    "dd MMMM yyyy",
+                  )}
+                </CardFooter>
               </Card>
             </Link>
           ))}
