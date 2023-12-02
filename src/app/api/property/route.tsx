@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import puppeteer from "puppeteer";
 
-export const runtime = "nodejs";
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
 
@@ -18,8 +17,11 @@ export async function GET(request: NextRequest) {
   const propertyUrlAsString = propertyURL.toString();
 
   try {
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.connect({
+      browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.BLESS_TOKEN}`,
+    });
     const page = await browser.newPage();
+    await page.setViewport({ width: 1920, height: 1080 });
     await page.goto(propertyUrlAsString);
 
     // there is a script tag that has a propety of window.PAGE_MODEL with all the data - get that
