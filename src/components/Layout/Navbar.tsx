@@ -17,11 +17,14 @@ import { useTheme } from "next-themes";
 import { useCurrencyContext } from "@/contexts/CurrencyContext";
 import { TCurrency } from "@/types/types";
 import Link from "next/link";
+import { useUserInformationContext } from "@/contexts/UserInformationContext";
+import { defaultBills, defaultHousemates } from "@/lib/localstorage";
 
 export const Navbar = () => {
+  const { setBills, setHousemates } = useUserInformationContext();
   const handleReset = () => {
-    localStorage.clear();
-    window.location.reload();
+    setBills(defaultBills);
+    setHousemates(defaultHousemates);
   };
 
   const { theme, setTheme } = useTheme();
