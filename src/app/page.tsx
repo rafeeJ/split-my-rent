@@ -68,12 +68,12 @@ export default function Home({
 
   return (
     <main className="min-h-screen items-center justify-between p-4 md:p-10 gap-y-2">
-      <div className={"flex flex-col p-2 md:text-center"}>
-        <h3 className={"text-2xl"}>Split based on your housemates incomes!</h3>
-      </div>
+      <section className={"flex flex-col p-2 md:text-center"}>
+        <h1 className={"text-2xl"}>Split based on your housemates incomes!</h1>
+      </section>
 
       <div className={"flex flex-col md:grid md:grid-cols-2 md:gap-8 gap-2"}>
-        <div className={"w-full"}>
+        <section className={"w-full"}>
           <div className={"p-2"}>
             <h1 className={"text-xl"}>Incomes</h1>
             <h3 className={"text-md"}>Add your housemates here!</h3>
@@ -83,9 +83,8 @@ export default function Home({
             data={housemates}
             setData={setHousemates}
           />
-        </div>
-
-        <div className={"w-full"}>
+        </section>
+        <section className={"w-full"}>
           <div className={"p-2"}>
             <h1 className={"text-xl"}>Add Bills</h1>
             <h3 className={"text-md"}>By the month!</h3>
@@ -97,39 +96,43 @@ export default function Home({
             setData={setBills}
             housemates={housemates}
           />
-        </div>
+        </section>
 
         <Separator className={"md:hidden"} />
 
-        <Card className={"w-full md:col-span-2"}>
-          <CardHeader>
-            <CardTitle>Results</CardTitle>
-            <CardDescription>See the results here!</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResultsTable housemateData={housemates} billData={bills} />
-          </CardContent>
-        </Card>
+        <section className={"w-full"}>
+          <Card>
+            <CardHeader>
+              <CardTitle>Results</CardTitle>
+              <CardDescription>See the results here!</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ResultsTable housemateData={housemates} billData={bills} />
+            </CardContent>
+          </Card>
+        </section>
 
-        <Card className={"w-full md:col-span-2"}>
-          <CardHeader>
-            <CardTitle>Share with housemates</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className={"grid gap-2"}>
-              <Input value={shareableUrlState} readOnly={true} />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button
-              onClick={() => {
-                navigator.clipboard.writeText(shareableUrlState);
-              }}
-            >
-              share
-            </Button>
-          </CardFooter>
-        </Card>
+        <section className={"w-full"}>
+          <Card>
+            <CardHeader>
+              <CardTitle>Share with housemates</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className={"grid gap-2"}>
+                <Input value={shareableUrlState} readOnly={true} />
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Button
+                onClick={() => {
+                  navigator.clipboard.writeText(shareableUrlState);
+                }}
+              >
+                share
+              </Button>
+            </CardFooter>
+          </Card>
+        </section>
       </div>
     </main>
   );

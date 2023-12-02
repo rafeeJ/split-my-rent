@@ -14,7 +14,7 @@ const fontSans = FontSans({
 
 export const metadata: Metadata = {
   title: "Split My Rent",
-  description: "Easy bill splitting for housemates",
+  description: "Easy bill splitting for housemates, friends and partners.",
   other: {
     "google-adsense-account": "ca-pub-0957049115549750",
   },
