@@ -25,26 +25,3 @@ export const getRightmoveData = async (prevState: any, formData: FormData) => {
 
   return { message: "Success", property };
 };
-
-// try {
-//   const response = await fetch(propertyUrlAsString, {
-//     method: "GET",
-//     headers: {
-//       "Content-Type": "text/html",
-//       "Access-Control-Allow-Origin": "*",
-//       "Access-Control-Allow-Headers": "*",
-//       "Access-Control-Allow-Methods": "*",
-//       "user-agent":
-//         "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
-//       "no-cors": "true",
-//     },
-//   });
-//   const data = await response.json();
-//
-//   console.log(data);
-//
-//   return data;
-// } catch (error) {
-//   return { message: "Error fetching data" };
-// }
-// };
