@@ -26,6 +26,7 @@ import {
   Tooltip,
 } from "recharts";
 import { Badge } from "@/components/ui/badge";
+import { useCurrencyContext } from "@/contexts/CurrencyContext";
 
 interface IResultsTableProps {
   housemateData: THousemate[];
@@ -36,6 +37,8 @@ export const ResultsTable = ({
   housemateData,
   billData,
 }: IResultsTableProps) => {
+  const { currency } = useCurrencyContext();
+
   const calculateHousemateTotals = () => {
     const applicableBills = billData
       .map((bill) => {
@@ -144,7 +147,7 @@ export const ResultsTable = ({
 
             const valueToDisplay = total.toLocaleString(undefined, {
               style: "currency",
-              currency: "GBP",
+              currency: currency,
             });
 
             const getRandomPurple = () => {

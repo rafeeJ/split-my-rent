@@ -5,6 +5,7 @@ import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/Layout/Navbar";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import { CurrencyProvider } from "@/contexts/CurrencyContext";
 
 const fontSans = FontSans({
   variable: "--font-sans",
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning={true}>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
@@ -35,8 +36,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
-          {children}
+          <CurrencyProvider>
+            <Navbar />
+            {children}
+          </CurrencyProvider>
         </ThemeProvider>
       </body>
     </html>
