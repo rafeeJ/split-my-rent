@@ -28,10 +28,7 @@ export const RightmoveForm = ({
 
   useEffect(() => {
     if (state.property) {
-      const price = state.property.propertyData.prices.primaryPrice.replace(
-        /[^0-9]/g,
-        "",
-      );
+      const price = state.property.price.replace(/[^0-9]/g, "");
       setMonthlyRent(Number(price));
     }
   }, [state.property]);
