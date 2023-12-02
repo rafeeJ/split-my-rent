@@ -28,11 +28,14 @@ export const HomeLayout = ({
   housematesFromUrl?: THousemate[];
   billsFromUrl?: TBill[];
 }) => {
+  const isServer = typeof window === "undefined";
   const [isClient, setIsClient] = useState(false);
   useEffect(() => setIsClient(true), []);
 
   const [shareableUrlState, setShareableUrlState] = useState("");
   const [housemates, setHousemates] = useState<THousemate[]>(() => {
+    if (isServer) return defaultHousemates;
+
     if (housematesFromUrl) {
       return housematesFromUrl;
     }
@@ -42,6 +45,8 @@ export const HomeLayout = ({
     return JSON.parse(housematesFromStorage);
   });
   const [bills, setBills] = useState<TBill[]>(() => {
+    if (isServer) return defaultBills;
+
     if (billsFromUrl) {
       return billsFromUrl;
     }
