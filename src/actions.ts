@@ -11,6 +11,10 @@ export const getRightmoveData = async (prevState: any, formData: FormData) => {
 
   const res = await fetch(`${getBaseUrl()}/api/property?${searchParams}`, {
     method: "GET",
+    headers: {
+      "user-agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+    },
   });
 
   if (res.status === 401) {
