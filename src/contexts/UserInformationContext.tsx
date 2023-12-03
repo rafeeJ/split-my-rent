@@ -66,7 +66,14 @@ export const UserInformationProvider = ({
     return defaultHousemates;
   });
 
-  const [rent, setRent] = useState<number>(0);
+  const [rent, setRent] = useState<number>(() => {
+    if (isServer) return 1000;
+    const rentFromLocalStorage = localStorage.getItem("rent");
+    if (rentFromLocalStorage) {
+      return JSON.parse(rentFromLocalStorage);
+    }
+    return 1000;
+  });
   const [rentDistribution, setRentDistribution] =
     useState<TDistribution>("equally");
   const [customRentSplit, setCustomRentSplit] = useState<any>(() => {
@@ -86,7 +93,8 @@ export const UserInformationProvider = ({
     // when there is a change, store the data in local storage
     localStorage.setItem("housemates", JSON.stringify(housemates));
     localStorage.setItem("bills", JSON.stringify(bills));
-  }, [housemates, bills]);
+    localStorage.setItem("rent", JSON.stringify(rent));
+  }, [housemates, bills, rent]);
 
   return (
     <UserInformationContext.Provider
