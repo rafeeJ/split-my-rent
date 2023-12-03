@@ -8,8 +8,21 @@ import { RentDistributionTable } from "@/components/RentTable/RentDistributionTa
 import { TDistribution } from "@/types/types";
 
 export const RentTable = () => {
-  const { rent, setRent, rentDistribution, setRentDistribution, housemates } =
-    useUserInformationContext();
+  const {
+    rent,
+    setRent,
+    rentDistribution,
+    setRentDistribution,
+    customRentSplit,
+  } = useUserInformationContext();
+
+  const totalCustomSplit = Object.values(customRentSplit).reduce(
+    (acc: number, curr: any) => acc + curr,
+    0,
+  );
+
+  const isCustomRentLargerThanRent = rent < totalCustomSplit;
+  const difference = rent - totalCustomSplit;
 
   const handleChange = (e: any) => {
     setRent(e.target.value);
@@ -69,12 +82,32 @@ export const RentTable = () => {
               </RadioGroup>
             </div>
             <div className={"w-1/2"} />
-            <div className={"flex text-center items-center justify-center"}>
+            <div className={"flex text-right items-center justify-center"}>
               <p>{typeDescriptions[rentDistribution]}</p>
             </div>
           </div>
         </div>
         <RentDistributionTable distributionMethod={rentDistribution} />
+        {rentDistribution === "custom" && isCustomRentLargerThanRent && (
+          <p className={"text-red-500"}>
+            The custom rent split is larger than the rent you have entered.
+          </p>
+        )}
+        {rentDistribution === "custom" && (
+          <p>
+            {rentDistribution === "custom" && difference > 1 && (
+              <p className={"text-green-500"}>
+                The custom rent split is smaller than the rent you have entered.
+                <br />
+                You have £
+                {difference.toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                })}{" "}
+                left to allocate.
+              </p>
+            )}
+          </p>
+        )}
       </div>
     </div>
   );

@@ -21,27 +21,27 @@ export const columns = [
     cell: CurrencyCell,
     id: "income",
   }),
-  // columnHelper.display({
-  //   header: "Proportion",
-  //   cell: ({ row, table }) => {
-  //     const income = row.getValue("income") as number;
-  //
-  //     const totalIncome = table
-  //       .getRowModel()
-  //       .rows.reduce((acc, { original }) => acc + Number(original.income), 0);
-  //
-  //     const proportion = (income / totalIncome) * 100;
-  //
-  //     return (
-  //       <span>
-  //         {proportion.toLocaleString(undefined, {
-  //           maximumFractionDigits: 2,
-  //         })}
-  //         %
-  //       </span>
-  //     );
-  //   },
-  // }),
+  columnHelper.display({
+    header: "Proportion",
+    cell: ({ row, table }) => {
+      const income = row.getValue("income") as number;
+
+      const totalIncome = table
+        .getRowModel()
+        .rows.reduce((acc, { original }) => acc + Number(original.income), 0);
+
+      const proportion = (income / totalIncome) * 100;
+
+      return (
+        <span>
+          {proportion.toLocaleString(undefined, {
+            maximumFractionDigits: 2,
+          })}
+          %
+        </span>
+      );
+    },
+  }),
   columnHelper.display({
     id: "delete",
     cell: DeleteHousemateButton,
