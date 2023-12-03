@@ -74,9 +74,27 @@ export const UserInformationProvider = ({
     }
     return 1000;
   });
-  const [rentDistribution, setRentDistribution] =
-    useState<TDistribution>("equally");
+  const [rentDistribution, setRentDistribution] = useState<TDistribution>(
+    () => {
+      if (isServer) return "equally";
+      const rentDistributionFromLocalStorage =
+        localStorage.getItem("rentDistribution");
+      if (rentDistributionFromLocalStorage) {
+        return JSON.parse(rentDistributionFromLocalStorage);
+      }
+      return "equally";
+    },
+  );
+
   const [customRentSplit, setCustomRentSplit] = useState<any>(() => {
+    if (isServer) return {};
+    const customRentSplitFromLocalStorage =
+      localStorage.getItem("customRentSplit");
+
+    if (customRentSplitFromLocalStorage) {
+      return JSON.parse(customRentSplitFromLocalStorage);
+    }
+
     return {
       housemateId: "",
       rent: 0,
@@ -94,7 +112,9 @@ export const UserInformationProvider = ({
     localStorage.setItem("housemates", JSON.stringify(housemates));
     localStorage.setItem("bills", JSON.stringify(bills));
     localStorage.setItem("rent", JSON.stringify(rent));
-  }, [housemates, bills, rent]);
+    localStorage.setItem("rentDistribution", JSON.stringify(rentDistribution));
+    localStorage.setItem("customRentSplit", JSON.stringify(customRentSplit));
+  }, [housemates, bills, rent, rentDistribution, customRentSplit]);
 
   return (
     <UserInformationContext.Provider
