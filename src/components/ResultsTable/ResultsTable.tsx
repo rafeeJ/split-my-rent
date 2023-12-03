@@ -74,6 +74,17 @@ export const ResultsTable = ({
               style: "currency",
               currency: currency,
             });
+
+            const pieChartData = housemateTotalsWithRent.map((entry) => {
+              // reduce to 2 decimal places
+              const total = Math.round(entry.total * 100) / 100;
+
+              return {
+                name: entry.housemate.name,
+                total: total,
+              };
+            });
+
             const DataTable = () => {
               return (
                 <Table>
@@ -121,14 +132,13 @@ export const ResultsTable = ({
                       <DialogHeader>
                         <DialogTitle>Detailed View</DialogTitle>
                       </DialogHeader>
-                      <div className={"flex flex-row"}>
+                      <div className={"flex flex-row pb-10"}>
                         <ResponsiveContainer width={200} aspect={1}>
                           <PieChart>
                             <Tooltip />
                             <Legend verticalAlign={"bottom"} height={18} />
-
                             <Pie
-                              data={housemateTotalsWithRent}
+                              data={pieChartData}
                               dataKey="total"
                               nameKey="housemate.name"
                               innerRadius={20}
@@ -137,7 +147,17 @@ export const ResultsTable = ({
                               label
                             >
                               {housemateTotalsWithRent.map((entry, index) => {
-                                return <Cell key={`cell-${index}`} />;
+                                return (
+                                  <Cell
+                                    key={`cell-${index}`}
+                                    fill={
+                                      entry.housemate.id ===
+                                      housemate.housemate.id
+                                        ? "#8884d8"
+                                        : "#8c918e"
+                                    }
+                                  />
+                                );
                               })}
                             </Pie>
                           </PieChart>
@@ -154,7 +174,6 @@ export const ResultsTable = ({
                               outerRadius={40}
                             >
                               {housemateTotalsWithRent.map((entry, index) => {
-                                if (!entry) return;
                                 return <Cell key={`cell-${index}`} />;
                               })}
                             </Pie>
