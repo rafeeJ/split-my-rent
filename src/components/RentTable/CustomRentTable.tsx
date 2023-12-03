@@ -66,9 +66,7 @@ export const CustomRentTable = () => {
                 type={"number"}
                 placeholder="£2,350"
                 name={housemate.id.toString()}
-                value={customRentSplit[housemate.id].toLocaleString(undefined, {
-                  maximumFractionDigits: 2,
-                })}
+                value={customRentSplit[housemate.id]}
                 onChange={handleChange}
               />
             </TableCell>

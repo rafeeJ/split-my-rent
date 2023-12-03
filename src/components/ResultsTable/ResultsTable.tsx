@@ -4,6 +4,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -30,6 +31,7 @@ import { useCurrencyContext } from "@/contexts/CurrencyContext";
 import { calculateBillsPerPerson } from "@/lib/calculations/totalPerHousemate";
 import { useUserInformationContext } from "@/contexts/UserInformationContext";
 import { billsWithRent } from "@/lib/calculations/billsWithRent";
+import { getRandomPurple } from "@/lib/getRandomColor";
 
 interface IResultsTableProps {
   housemateData: THousemate[];
@@ -78,10 +80,18 @@ export const ResultsTable = ({
             const pieChartData = housemateTotalsWithRent.map((entry) => {
               // reduce to 2 decimal places
               const total = Math.round(entry.total * 100) / 100;
-
               return {
                 name: entry.housemate.name,
                 total: total,
+              };
+            });
+
+            const tableData = housemate.share.map((bill) => {
+              const color = getRandomPurple();
+              return {
+                name: bill.name,
+                amount: bill.amount,
+                color,
               };
             });
 
@@ -91,17 +101,22 @@ export const ResultsTable = ({
                   <TableHeader>
                     <TableRow>
                       <TableHead>Bill</TableHead>
-                      <TableHead>Amount</TableHead>
+                      <TableHead className={"text-right"}>Amount</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {housemate.share.map((bill, idx) => {
+                    {tableData.map((bill, idx) => {
                       return (
                         <TableRow key={idx}>
                           <TableCell>
-                            <Badge className={"mr-2"}>{bill.name}</Badge>
+                            <Badge
+                              className={"mr-2"}
+                              style={{ backgroundColor: bill.color }}
+                            >
+                              {bill.name}
+                            </Badge>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className={"text-right"}>
                             {bill.amount.toLocaleString(undefined, {
                               style: "currency",
                               currency: "GBP",
@@ -111,6 +126,17 @@ export const ResultsTable = ({
                       );
                     })}
                   </TableBody>
+                  <TableFooter>
+                    <TableRow>
+                      <TableCell>Total</TableCell>
+                      <TableCell className={"text-right"}>
+                        {housemate.total.toLocaleString(undefined, {
+                          style: "currency",
+                          currency: "GBP",
+                        })}
+                      </TableCell>
+                    </TableRow>
+                  </TableFooter>
                 </Table>
               );
             };
@@ -167,20 +193,34 @@ export const ResultsTable = ({
                             <Tooltip />
                             <Legend verticalAlign={"bottom"} height={18} />
                             <Pie
-                              data={housemate.share}
+                              data={tableData}
                               nameKey="name"
                               dataKey="amount"
                               innerRadius={20}
                               outerRadius={40}
                             >
-                              {housemateTotalsWithRent.map((entry, index) => {
-                                return <Cell key={`cell-${index}`} />;
+                              {tableData.map((entry, index) => {
+                                return (
+                                  <Cell
+                                    key={`cell-${index}`}
+                                    fill={entry.color}
+                                  />
+                                );
                               })}
                             </Pie>
                           </PieChart>
                         </ResponsiveContainer>
                       </div>
                       <DataTable />
+                      <p>
+                        {housemate.housemate.name} is left with:{" "}
+                        {(
+                          housemate.housemate.income - housemate.total
+                        ).toLocaleString(undefined, {
+                          style: "currency",
+                          currency: currency,
+                        })}
+                      </p>
                     </DialogContent>
                   </Dialog>
                 </TableCell>
