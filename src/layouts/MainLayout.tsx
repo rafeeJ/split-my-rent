@@ -21,6 +21,7 @@ import { ResultsTable } from "@/components/ResultsTable/ResultsTable";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useUserInformationContext } from "@/contexts/UserInformationContext";
+import { RentTable } from "@/components/RentTable/RentTable";
 
 export const HomeLayout = ({
   housematesFromUrl,
@@ -74,6 +75,15 @@ export const HomeLayout = ({
             setData={setHousemates}
           />
         </section>
+
+        <section className={"w-full"}>
+          <div className={"p-2"}>
+            <h1 className={"text-xl"}>Monthly Rent</h1>
+            <h3 className={"text-md"}>and choose your split</h3>
+          </div>
+          <RentTable />
+        </section>
+
         <section className={"w-full"}>
           <div className={"p-2"}>
             <h1 className={"text-xl"}>Add Bills</h1>

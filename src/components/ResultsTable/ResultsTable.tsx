@@ -27,6 +27,8 @@ import {
 } from "recharts";
 import { Badge } from "@/components/ui/badge";
 import { useCurrencyContext } from "@/contexts/CurrencyContext";
+import { calculateBillsPerPerson } from "@/lib/calculations/totalPerHousemate";
+import { useUserInformationContext } from "@/contexts/UserInformationContext";
 
 interface IResultsTableProps {
   housemateData: THousemate[];
@@ -38,78 +40,10 @@ export const ResultsTable = ({
   billData,
 }: IResultsTableProps) => {
   const { currency } = useCurrencyContext();
+  const { rentSplit, rentDistribution, customRentSplit } =
+    useUserInformationContext();
 
-  const calculateHousemateTotals = () => {
-    const applicableBills = billData
-      .map((bill) => {
-        const applicableHousemates = bill.applicableHousemates.map((id) => {
-          const housemate = housemateData.find((hm) => hm.id === id);
-          if (!housemate) return;
-          housemate.income = Number(housemate.income);
-          return housemate;
-        });
-        return {
-          ...bill,
-          applicableHousemates,
-        };
-      })
-      .map((bill) => {
-        const applicableHousemates = bill.applicableHousemates.filter(
-          (hm) => hm !== undefined,
-        );
-        return {
-          ...bill,
-          applicableHousemates,
-        };
-      });
-
-    const housematePayments = applicableBills.map((bill) => {
-      const totalApplicableIncome = bill.applicableHousemates.reduce(
-        (acc, housemate) => {
-          if (!housemate) return acc;
-          return acc + housemate.income;
-        },
-        0,
-      );
-
-      const housematePayments = bill.applicableHousemates.map((housemate) => {
-        if (!housemate) return;
-        const proportion = bill.splitProportionally
-          ? housemate.income / totalApplicableIncome
-          : 1 / bill.applicableHousemates.length;
-        const amount = bill.amount * proportion;
-
-        const billName = bill.name;
-
-        return {
-          housemate,
-          amount,
-          billName,
-        };
-      });
-      return housematePayments;
-    });
-
-    // for each housemate, find the bills they are applicable for and group them
-    const splitBillsPerHousemate = housemateData.map((housemate) => {
-      const bills = housematePayments.map((bill) => {
-        const billForHousemate = bill.find((b) => {
-          if (!b) return;
-          return b.housemate.id === housemate.id;
-        });
-        return billForHousemate;
-      });
-      return {
-        id: housemate.id,
-        name: housemate.name,
-        bills,
-      };
-    });
-
-    return splitBillsPerHousemate;
-  };
-
-  const housemateTotals = calculateHousemateTotals();
+  const housemateTotals = calculateBillsPerPerson({ housemateData, billData });
   const sanitisedHousemateTotals = housemateTotals.map((housemate) => {
     const total = housemate.bills.reduce((acc, bill) => {
       if (!bill) return acc;

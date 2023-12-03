@@ -8,3 +8,5 @@ export type TCurrency =
   | "JPY"
   | "CNY"
   | "HKD";
+
+export type TDistribution = "custom" | "equally" | "proportionally";
