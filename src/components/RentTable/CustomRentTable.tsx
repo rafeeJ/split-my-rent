@@ -20,31 +20,15 @@ import { useUserInformationContext } from "@/contexts/UserInformationContext";
 import { Input } from "@/components/ui/input";
 
 export const CustomRentTable = () => {
-  const {
-    rentDistribution,
-    setCustomRentSplit,
-    housemates,
-    customRentSplit,
-    rent,
-  } = useUserInformationContext();
-
-  useEffect(() => {
-    const initialRentSplit = housemates.reduce((acc, housemate) => {
-      return {
-        ...acc,
-        [housemate.id]: rent / housemates.length,
-      };
-    }, {});
-
-    setCustomRentSplit(initialRentSplit);
-  }, [rentDistribution, housemates, rent]);
+  const { setCustomRentSplit, housemates, customRentSplit } =
+    useUserInformationContext();
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     console.log(name, value);
     setCustomRentSplit((prev: any) => ({
       ...prev,
-      [name]: Number(value),
+      [name]: value === "" ? 0 : Number(value),
     }));
   };
 
