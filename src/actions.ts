@@ -1,6 +1,10 @@
 "use server";
 import { getBaseUrl } from "@/lib/api/helpers";
+import { Octokit, App } from "octokit";
 
+const octokit = new Octokit({
+  auth: process.env.GITHUB_TOKEN,
+});
 export const getRightmoveData = async (prevState: any, formData: FormData) => {
   const propertyURL = formData.get("url");
   if (!propertyURL) {
@@ -29,3 +33,8 @@ export const getRightmoveData = async (prevState: any, formData: FormData) => {
 
   return { message: "Success", property };
 };
+
+export const createGithubIssues = async (
+  prevState: any,
+  formData: FormData,
+) => {};

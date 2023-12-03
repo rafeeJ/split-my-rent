@@ -30,6 +30,7 @@
     "next": "14.0.3",
     "next-mdx-remote": "^4.4.1",
     "next-themes": "^0.2.1",
+    "octokit": "^3.1.2",
     "puppeteer": "^21.5.2",
     "puppeteer-core": "^21.5.2",
     "react": "^18",

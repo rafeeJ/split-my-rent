@@ -19,6 +19,7 @@ import { TCurrency } from "@/types/types";
 import Link from "next/link";
 import { useUserInformationContext } from "@/contexts/UserInformationContext";
 import { defaultBills, defaultHousemates } from "@/lib/localstorage";
+import { FeedbackForm } from "@/components/Layout/FeedbackForm";
 
 export const Navbar = () => {
   const { setBills, setHousemates } = useUserInformationContext();
@@ -104,6 +105,10 @@ export const Navbar = () => {
                 System
               </DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <FeedbackForm />
+            </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
