@@ -26,27 +26,26 @@ export const CustomRentTable = () => {
     housemates,
     customRentSplit,
     rentSplit,
+    rent,
   } = useUserInformationContext();
 
   useEffect(() => {
     const initialRentSplit = housemates.reduce((acc, housemate) => {
       return {
         ...acc,
-        [housemate.name]: rentSplit[housemate.name],
+        [housemate.id]: rent / housemates.length,
       };
     }, {});
 
-    console.log(initialRentSplit);
-
     setCustomRentSplit(initialRentSplit);
-  }, [rentDistribution, housemates]);
+  }, [rentDistribution, housemates, rent]);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     console.log(name, value);
     setCustomRentSplit((prev: any) => ({
       ...prev,
-      [name]: value,
+      [name]: Number(value),
     }));
   };
 
@@ -67,8 +66,8 @@ export const CustomRentTable = () => {
                 min={0}
                 type={"number"}
                 placeholder="£2,350"
-                name={housemate.name}
-                value={customRentSplit[housemate.name]}
+                name={housemate.id.toString()}
+                value={customRentSplit[housemate.id]}
                 onChange={handleChange}
               />
             </TableCell>

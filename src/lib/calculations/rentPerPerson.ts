@@ -15,9 +15,9 @@ export const rentPerPerson = ({
 } => {
   if (rentDistribution === "equally") {
     const rentPerHousemate = rent / housemates.length;
-    const rentPerPerson: { [name: string]: number } = {};
+    const rentPerPerson: { [name: number]: number } = {};
     housemates.forEach((housemate) => {
-      rentPerPerson[housemate.name] = rentPerHousemate;
+      rentPerPerson[housemate.id] = rentPerHousemate;
     });
     return rentPerPerson;
   } else if (rentDistribution === "proportionally") {
@@ -25,16 +25,12 @@ export const rentPerPerson = ({
       (total, housemate) => total + housemate.income,
       0,
     );
-    const rentPerPerson: { [name: string]: number } = {};
+    const rentPerPerson: { [name: number]: number } = {};
     housemates.forEach((housemate) => {
-      rentPerPerson[housemate.name] = (housemate.income / totalIncome) * rent;
+      rentPerPerson[housemate.id] = (housemate.income / totalIncome) * rent;
     });
     return rentPerPerson;
   } else {
-    const rentPerPerson: { [name: string]: number } = {};
-    housemates.forEach((housemate) => {
-      rentPerPerson[housemate.name] = 0;
-    });
-    return rentPerPerson;
+    return {};
   }
 };

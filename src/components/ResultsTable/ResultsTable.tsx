@@ -29,6 +29,7 @@ import { Badge } from "@/components/ui/badge";
 import { useCurrencyContext } from "@/contexts/CurrencyContext";
 import { calculateBillsPerPerson } from "@/lib/calculations/totalPerHousemate";
 import { useUserInformationContext } from "@/contexts/UserInformationContext";
+import { billsWithRent } from "@/lib/calculations/billsWithRent";
 
 interface IResultsTableProps {
   housemateData: THousemate[];
@@ -44,17 +45,12 @@ export const ResultsTable = ({
     useUserInformationContext();
 
   const housemateTotals = calculateBillsPerPerson({ housemateData, billData });
-  const sanitisedHousemateTotals = housemateTotals.map((housemate) => {
-    const total = housemate.bills.reduce((acc, bill) => {
-      if (!bill) return acc;
-      return acc + bill.amount;
-    }, 0);
-
-    return {
-      name: housemate.name,
-      value: parseFloat(total.toFixed(2)),
-    };
-  });
+  const housemateTotalsWithRent = billsWithRent(
+    housemateTotals,
+    rentSplit,
+    rentDistribution,
+    customRentSplit,
+  );
 
   return (
     <div className={"w-full"}>
@@ -66,42 +62,18 @@ export const ResultsTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {housemateTotals.length === 0 && (
+          {housemateTotalsWithRent.length === 0 && (
             <TableRow>
               <TableCell colSpan={2} className="h-24 text-center">
                 No results.
               </TableCell>
             </TableRow>
           )}
-          {housemateTotals.map((housemate, idx) => {
-            const total = housemate.bills.reduce((acc, bill) => {
-              if (!bill) return acc;
-              return acc + bill.amount;
-            }, 0);
-
-            const valueToDisplay = total.toLocaleString(undefined, {
+          {housemateTotalsWithRent.map((housemate, idx) => {
+            const valueToDisplay = housemate.total.toLocaleString(undefined, {
               style: "currency",
               currency: currency,
             });
-
-            const getRandomPurple = () => {
-              const red = Math.floor(Math.random() * 256);
-              const blue = Math.floor(Math.random() * 256);
-              const green = 128;
-
-              return `rgb(${red}, ${green}, ${blue})`;
-            };
-
-            const sanitisedBillSplit = housemate.bills.map((bill) => {
-              const color = getRandomPurple();
-              if (!bill) return;
-              return {
-                name: bill.billName,
-                value: parseFloat(bill.amount.toFixed(2)),
-                color,
-              };
-            });
-
             const DataTable = () => {
               return (
                 <Table>
@@ -112,23 +84,14 @@ export const ResultsTable = ({
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {sanitisedBillSplit.map((bill, idx) => {
-                      if (!bill) return;
-
-                      const color = bill.color;
-                      console.log(color);
+                    {housemate.share.map((bill, idx) => {
                       return (
                         <TableRow key={idx}>
-                          <TableCell style={{ color }}>
-                            <Badge
-                              style={{ backgroundColor: color }}
-                              className={"mr-2"}
-                            >
-                              {bill.name}
-                            </Badge>
+                          <TableCell>
+                            <Badge className={"mr-2"}>{bill.name}</Badge>
                           </TableCell>
                           <TableCell>
-                            {bill.value.toLocaleString(undefined, {
+                            {bill.amount.toLocaleString(undefined, {
                               style: "currency",
                               currency: "GBP",
                             })}
@@ -143,7 +106,7 @@ export const ResultsTable = ({
 
             return (
               <TableRow key={idx}>
-                <TableCell>{housemate.name}</TableCell>
+                <TableCell>{housemate.housemate.name}</TableCell>
                 <TableCell className={"text-right"}>
                   <Dialog>
                     <DialogTrigger className={"font-bold underline"}>
@@ -165,25 +128,16 @@ export const ResultsTable = ({
                             <Legend verticalAlign={"bottom"} height={18} />
 
                             <Pie
-                              data={sanitisedHousemateTotals}
-                              dataKey="value"
-                              nameKey="name"
+                              data={housemateTotalsWithRent}
+                              dataKey="total"
+                              nameKey="housemate.name"
                               innerRadius={20}
                               outerRadius={40}
                               fill="#82ca9d"
                               label
                             >
-                              {sanitisedHousemateTotals.map((entry, index) => {
-                                return (
-                                  <Cell
-                                    key={`cell-${index}`}
-                                    fill={
-                                      entry.name === housemate.name
-                                        ? "#8884d8"
-                                        : "#6a6a73"
-                                    }
-                                  />
-                                );
+                              {housemateTotalsWithRent.map((entry, index) => {
+                                return <Cell key={`cell-${index}`} />;
                               })}
                             </Pie>
                           </PieChart>
@@ -193,20 +147,15 @@ export const ResultsTable = ({
                             <Tooltip />
                             <Legend verticalAlign={"bottom"} height={18} />
                             <Pie
-                              dataKey="value"
-                              data={sanitisedBillSplit}
+                              data={housemate.share}
                               nameKey="name"
+                              dataKey="amount"
                               innerRadius={20}
                               outerRadius={40}
                             >
-                              {sanitisedBillSplit.map((entry, index) => {
+                              {housemateTotalsWithRent.map((entry, index) => {
                                 if (!entry) return;
-                                return (
-                                  <Cell
-                                    key={`cell-${index}`}
-                                    fill={entry.color}
-                                  />
-                                );
+                                return <Cell key={`cell-${index}`} />;
                               })}
                             </Pie>
                           </PieChart>

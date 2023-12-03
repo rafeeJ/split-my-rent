@@ -28,7 +28,7 @@ export const StaticRentTable = ({
           <TableRow key={housemate.id}>
             <TableCell>{housemate.name}</TableCell>
             <TableCell className={"text-right"}>
-              {rentSplit[housemate.name].toLocaleString(undefined, {
+              {rentSplit[housemate.id].toLocaleString(undefined, {
                 style: "currency",
                 currency: "GBP",
               })}

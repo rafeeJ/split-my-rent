@@ -7,7 +7,6 @@ export type THousemate = {
   id: number;
   name: string;
   income: number;
-  rentShare: number;
 };
 
 const columnHelper = createColumnHelper<THousemate>();
