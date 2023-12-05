@@ -8,8 +8,15 @@ import NavigateToAppButton from "@/components/Blog/NavigateToAppButton";
 export async function generateMetadata({ params }: any) {
   const post = await getPostBySlug(params.slug);
   return {
-    title: post.frontmatter.title,
+    title: "SplitMy.Rent | " + post.frontmatter.title,
     description: post.frontmatter.description,
+    openGraph: {
+      title: "SplitMy.Rent | " + post.frontmatter.title,
+      description: post.frontmatter.description,
+    },
+    alternates: {
+      canonical: "https://splitmyrent.com/blog/" + params.slug,
+    },
   };
 }
 

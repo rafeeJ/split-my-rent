@@ -10,6 +10,17 @@ import {
 } from "@/components/ui/card";
 import NavigateToAppButton from "@/components/Blog/NavigateToAppButton";
 import { format, parse } from "date-fns";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "SplitMy.Rent | Blog",
+  openGraph: {
+    title: "SplitMy.Rent | Blog",
+  },
+  alternates: {
+    canonical: "https://splitmyrent.com/blog",
+  },
+};
 
 export default async function Blog() {
   const blogs = await getAllArticles();
