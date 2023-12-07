@@ -11,12 +11,21 @@ import {
   useState,
 } from "react";
 import { defaultBills, defaultHousemates } from "@/lib/localstorage";
+import { TDistribution } from "@/types/types";
+import { rentPerPerson } from "@/lib/calculations/rentPerPerson";
 
 interface IUserInformationContextType {
   bills: TBill[];
   setBills: Dispatch<SetStateAction<TBill[]>>;
   housemates: THousemate[];
   setHousemates: Dispatch<SetStateAction<THousemate[]>>;
+  rent: number;
+  setRent: Dispatch<SetStateAction<number>>;
+  rentDistribution: TDistribution;
+  setRentDistribution: Dispatch<SetStateAction<TDistribution>>;
+  rentSplit: any;
+  customRentSplit: any;
+  setCustomRentSplit: Dispatch<SetStateAction<any>>;
 }
 
 const UserInformationContext = createContext<IUserInformationContextType>({
@@ -24,6 +33,13 @@ const UserInformationContext = createContext<IUserInformationContextType>({
   setBills: () => {},
   housemates: [],
   setHousemates: () => {},
+  rent: 0,
+  setRent: () => {},
+  rentDistribution: "equally",
+  setRentDistribution: () => {},
+  rentSplit: [],
+  customRentSplit: [],
+  setCustomRentSplit: () => {},
 });
 
 export const UserInformationProvider = ({
@@ -50,11 +66,55 @@ export const UserInformationProvider = ({
     return defaultHousemates;
   });
 
+  const [rent, setRent] = useState<number>(() => {
+    if (isServer) return 1000;
+    const rentFromLocalStorage = localStorage.getItem("rent");
+    if (rentFromLocalStorage) {
+      return JSON.parse(rentFromLocalStorage);
+    }
+    return 1000;
+  });
+  const [rentDistribution, setRentDistribution] = useState<TDistribution>(
+    () => {
+      if (isServer) return "equally";
+      const rentDistributionFromLocalStorage =
+        localStorage.getItem("rentDistribution");
+      if (rentDistributionFromLocalStorage) {
+        return JSON.parse(rentDistributionFromLocalStorage);
+      }
+      return "equally";
+    },
+  );
+
+  const [customRentSplit, setCustomRentSplit] = useState<any>(() => {
+    if (isServer) return {};
+    const customRentSplitFromLocalStorage =
+      localStorage.getItem("customRentSplit");
+
+    if (customRentSplitFromLocalStorage) {
+      return JSON.parse(customRentSplitFromLocalStorage);
+    }
+
+    return {
+      housemateId: "",
+      rent: 0,
+    };
+  });
+
+  const rentSplit = rentPerPerson({
+    rent,
+    housemates,
+    rentDistribution,
+  });
+
   useEffect(() => {
     // when there is a change, store the data in local storage
     localStorage.setItem("housemates", JSON.stringify(housemates));
     localStorage.setItem("bills", JSON.stringify(bills));
-  }, [housemates, bills]);
+    localStorage.setItem("rent", JSON.stringify(rent));
+    localStorage.setItem("rentDistribution", JSON.stringify(rentDistribution));
+    localStorage.setItem("customRentSplit", JSON.stringify(customRentSplit));
+  }, [housemates, bills, rent, rentDistribution, customRentSplit]);
 
   return (
     <UserInformationContext.Provider
@@ -63,6 +123,13 @@ export const UserInformationProvider = ({
         setBills,
         housemates,
         setHousemates,
+        rent,
+        setRent,
+        rentDistribution,
+        setRentDistribution,
+        rentSplit,
+        customRentSplit,
+        setCustomRentSplit,
       }}
     >
       {children}

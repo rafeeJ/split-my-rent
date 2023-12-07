@@ -21,6 +21,7 @@ import { ResultsTable } from "@/components/ResultsTable/ResultsTable";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useUserInformationContext } from "@/contexts/UserInformationContext";
+import { RentTable } from "@/components/RentTable/RentTable";
 
 export const HomeLayout = ({
   housematesFromUrl,
@@ -62,11 +63,11 @@ export const HomeLayout = ({
         <h1 className={"text-2xl"}>Split based on your housemates incomes!</h1>
       </section>
 
-      <div className={"flex flex-col md:grid md:grid-cols-2 md:gap-8 gap-2"}>
-        <section className={"w-full"}>
+      <div className={"flex flex-col md:grid md:grid-cols-4 md:gap-8 gap-2"}>
+        <section className={"w-full col-start-2 col-end-4"}>
           <div className={"p-2"}>
-            <h1 className={"text-xl"}>Incomes</h1>
-            <h3 className={"text-md"}>Add your housemates here!</h3>
+            <h1 className={"text-xl"}>Add your housemates</h1>
+            <h3 className={"text-md"}>Gross monthly income</h3>
           </div>
           <HouseMateTable
             columns={HousemateColumns}
@@ -74,10 +75,19 @@ export const HomeLayout = ({
             setData={setHousemates}
           />
         </section>
-        <section className={"w-full"}>
+
+        <section className={"w-full col-span-2"}>
           <div className={"p-2"}>
-            <h1 className={"text-xl"}>Add Bills</h1>
-            <h3 className={"text-md"}>By the month!</h3>
+            <h1 className={"text-xl"}>Monthly Rent</h1>
+            <h3 className={"text-md"}>and choose your split</h3>
+          </div>
+          <RentTable />
+        </section>
+
+        <section className={"w-full col-span-2"}>
+          <div className={"p-2"}>
+            <h1 className={"text-xl"}>Add monthly Bills</h1>
+            <h3 className={"text-md"}>and choose how you want to split them</h3>
           </div>
 
           <BillTable
@@ -90,7 +100,7 @@ export const HomeLayout = ({
 
         <Separator className={"md:hidden"} />
 
-        <section className={"w-full"}>
+        <section className={"w-full col-span-3"}>
           <Card>
             <CardHeader>
               <CardTitle>Results</CardTitle>

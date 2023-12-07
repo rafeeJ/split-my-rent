@@ -1,10 +1,9 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import { CurrencyCell } from "@/components/common/CurrencyCell";
-import { DeleteHousemateButton } from "@/components/HousemateTable/DeleteHousemateButton";
-import { FilterHousemates } from "@/components/BillTable/FilterHousemates";
 import { ApplicableHousemateList } from "@/components/BillTable/ApplicableHousemateList";
 import { TextCell } from "@/components/common/TextCell";
 import { EditBillDialog } from "@/components/BillTable/EditBillDialog";
+import { DeleteBillButton } from "@/components/BillTable/DeleteBillButton";
 
 export type TBill = {
   id: number;
@@ -31,7 +30,7 @@ export const columns = [
   }),
   columnHelper.display({
     id: "delete",
-    cell: DeleteHousemateButton,
+    cell: DeleteBillButton,
   }),
   columnHelper.accessor("applicableHousemates", {
     header: "Applicable Housemates",

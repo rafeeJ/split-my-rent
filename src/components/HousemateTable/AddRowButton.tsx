@@ -1,11 +1,15 @@
 import { Button } from "@/components/ui/button";
-import { TableCell } from "@/components/ui/table";
-import { Table } from "@tanstack/table-core";
+import { HTMLAttributes } from "react";
 
-export const AddRowButton = ({ table }: any) => {
+interface IAddRowButtonProps extends HTMLAttributes<HTMLButtonElement> {
+  table: any;
+}
+
+export const AddRowButton = ({ table, ...props }: IAddRowButtonProps) => {
   const meta = table.options.meta;
+
   return (
-    <Button variant={"outline"} onClick={() => meta?.addRow()}>
+    <Button {...props} variant={"outline"} onClick={() => meta?.addRow()}>
       Add row
     </Button>
   );
