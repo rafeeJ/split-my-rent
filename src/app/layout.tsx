@@ -16,10 +16,13 @@ const fontSans = FontSans({
 
 export const metadata: Metadata = {
   title: "Split My Rent",
-  description: "Easy bill splitting for housemates, friends and partners.",
+  description:
+    "Split rent and bills with housemates, friends and partners - the easy way.",
+
   openGraph: {
     title: "Split My Rent",
-    description: "Easy bill splitting for housemates, friends and partners.",
+    description:
+      "Split rent and bills with housemates, friends and partners - the easy way.",
     type: "website",
   },
   other: {

@@ -13,9 +13,11 @@ import { format, parse } from "date-fns";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "SplitMy.Rent | Blog",
+  title: "Blog | Split My Rent",
+  description: "Easy bill splitting for housemates, friends and partners.",
   openGraph: {
-    title: "SplitMy.Rent | Blog",
+    title: "Blog | Split My Rent",
+    description: "Easy bill splitting for housemates, friends and partners.",
   },
   alternates: {
     canonical: "https://splitmyrent.com/blog",
