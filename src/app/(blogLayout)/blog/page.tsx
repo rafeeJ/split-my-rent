@@ -34,7 +34,7 @@ export default async function Blog() {
         <div className={"py-2"}>
           <NavigateToAppButton text={"Try out Split My Rent"} />
         </div>
-        <div className="py-2 md:px-20 ">
+        <div className="py-2 md:px-20 grid gap-2 grid-cols-1">
           {blogs.map((blog) => (
             <Link href={"/blog/" + blog.slug} passHref key={blog.slug}>
               <Card>
