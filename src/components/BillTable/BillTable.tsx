@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/table";
 import { AddRowButton } from "@/components/HousemateTable/AddRowButton";
 import { TBill } from "@/components/BillTable/Columns";
+import { AddSuggestedRows } from "@/components/BillTable/AddSuggestedRows";
+import { defaultBills } from "@/lib/localstorage";
 
 interface DataTableProps {
   columns: ColumnDef<any, any>[];
@@ -63,6 +65,10 @@ export function BillTable({
         );
       },
       housemates,
+      addSuggestedRows: () => {
+        if (data.length) return;
+        setData(defaultBills);
+      },
       addRow: () => {
         const maxId = Math.max(...data.map((row) => row.id));
         const newRow: TBill = {
@@ -163,6 +169,10 @@ export function BillTable({
           <TableRow>
             <TableCell colSpan={columns.length} className="h-24 text-center">
               <AddRowButton table={table} />
+              <AddSuggestedRows
+                table={table}
+                className={`${data.length === 0 ? "relative" : "hidden"}`}
+              />
             </TableCell>
           </TableRow>
         </TableFooter>

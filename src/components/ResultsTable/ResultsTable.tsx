@@ -4,6 +4,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -27,6 +28,10 @@ import {
 } from "recharts";
 import { Badge } from "@/components/ui/badge";
 import { useCurrencyContext } from "@/contexts/CurrencyContext";
+import { calculateBillsPerPerson } from "@/lib/calculations/totalPerHousemate";
+import { useUserInformationContext } from "@/contexts/UserInformationContext";
+import { billsWithRent } from "@/lib/calculations/billsWithRent";
+import { getRandomPurple } from "@/lib/getRandomColor";
 
 interface IResultsTableProps {
   housemateData: THousemate[];
@@ -38,89 +43,16 @@ export const ResultsTable = ({
   billData,
 }: IResultsTableProps) => {
   const { currency } = useCurrencyContext();
+  const { rentSplit, rentDistribution, customRentSplit } =
+    useUserInformationContext();
 
-  const calculateHousemateTotals = () => {
-    const applicableBills = billData
-      .map((bill) => {
-        const applicableHousemates = bill.applicableHousemates.map((id) => {
-          const housemate = housemateData.find((hm) => hm.id === id);
-          if (!housemate) return;
-          housemate.income = Number(housemate.income);
-          return housemate;
-        });
-        return {
-          ...bill,
-          applicableHousemates,
-        };
-      })
-      .map((bill) => {
-        const applicableHousemates = bill.applicableHousemates.filter(
-          (hm) => hm !== undefined,
-        );
-        return {
-          ...bill,
-          applicableHousemates,
-        };
-      });
-
-    const housematePayments = applicableBills.map((bill) => {
-      const totalApplicableIncome = bill.applicableHousemates.reduce(
-        (acc, housemate) => {
-          if (!housemate) return acc;
-          return acc + housemate.income;
-        },
-        0,
-      );
-
-      const housematePayments = bill.applicableHousemates.map((housemate) => {
-        if (!housemate) return;
-        const proportion = bill.splitProportionally
-          ? housemate.income / totalApplicableIncome
-          : 1 / bill.applicableHousemates.length;
-        const amount = bill.amount * proportion;
-
-        const billName = bill.name;
-
-        return {
-          housemate,
-          amount,
-          billName,
-        };
-      });
-      return housematePayments;
-    });
-
-    // for each housemate, find the bills they are applicable for and group them
-    const splitBillsPerHousemate = housemateData.map((housemate) => {
-      const bills = housematePayments.map((bill) => {
-        const billForHousemate = bill.find((b) => {
-          if (!b) return;
-          return b.housemate.id === housemate.id;
-        });
-        return billForHousemate;
-      });
-      return {
-        id: housemate.id,
-        name: housemate.name,
-        bills,
-      };
-    });
-
-    return splitBillsPerHousemate;
-  };
-
-  const housemateTotals = calculateHousemateTotals();
-  const sanitisedHousemateTotals = housemateTotals.map((housemate) => {
-    const total = housemate.bills.reduce((acc, bill) => {
-      if (!bill) return acc;
-      return acc + bill.amount;
-    }, 0);
-
-    return {
-      name: housemate.name,
-      value: parseFloat(total.toFixed(2)),
-    };
-  });
+  const housemateTotals = calculateBillsPerPerson({ housemateData, billData });
+  const housemateTotalsWithRent = billsWithRent(
+    housemateTotals,
+    rentSplit,
+    rentDistribution,
+    customRentSplit,
+  );
 
   return (
     <div className={"w-full"}>
@@ -132,38 +64,33 @@ export const ResultsTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {housemateTotals.length === 0 && (
+          {housemateTotalsWithRent.length === 0 && (
             <TableRow>
               <TableCell colSpan={2} className="h-24 text-center">
                 No results.
               </TableCell>
             </TableRow>
           )}
-          {housemateTotals.map((housemate, idx) => {
-            const total = housemate.bills.reduce((acc, bill) => {
-              if (!bill) return acc;
-              return acc + bill.amount;
-            }, 0);
-
-            const valueToDisplay = total.toLocaleString(undefined, {
+          {housemateTotalsWithRent.map((housemate, idx) => {
+            const valueToDisplay = housemate.total.toLocaleString(undefined, {
               style: "currency",
               currency: currency,
             });
 
-            const getRandomPurple = () => {
-              const red = Math.floor(Math.random() * 256);
-              const blue = Math.floor(Math.random() * 256);
-              const green = 128;
-
-              return `rgb(${red}, ${green}, ${blue})`;
-            };
-
-            const sanitisedBillSplit = housemate.bills.map((bill) => {
-              const color = getRandomPurple();
-              if (!bill) return;
+            const pieChartData = housemateTotalsWithRent.map((entry) => {
+              // reduce to 2 decimal places
+              const total = Math.round(entry.total * 100) / 100;
               return {
-                name: bill.billName,
-                value: parseFloat(bill.amount.toFixed(2)),
+                name: entry.housemate.name,
+                total: total,
+              };
+            });
+
+            const tableData = housemate.share.map((bill) => {
+              const color = getRandomPurple();
+              return {
+                name: bill.name,
+                amount: bill.amount,
                 color,
               };
             });
@@ -174,27 +101,23 @@ export const ResultsTable = ({
                   <TableHeader>
                     <TableRow>
                       <TableHead>Bill</TableHead>
-                      <TableHead>Amount</TableHead>
+                      <TableHead className={"text-right"}>Amount</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {sanitisedBillSplit.map((bill, idx) => {
-                      if (!bill) return;
-
-                      const color = bill.color;
-                      console.log(color);
+                    {tableData.map((bill, idx) => {
                       return (
                         <TableRow key={idx}>
-                          <TableCell style={{ color }}>
+                          <TableCell>
                             <Badge
-                              style={{ backgroundColor: color }}
                               className={"mr-2"}
+                              style={{ backgroundColor: bill.color }}
                             >
                               {bill.name}
                             </Badge>
                           </TableCell>
-                          <TableCell>
-                            {bill.value.toLocaleString(undefined, {
+                          <TableCell className={"text-right"}>
+                            {bill.amount.toLocaleString(undefined, {
                               style: "currency",
                               currency: "GBP",
                             })}
@@ -203,13 +126,24 @@ export const ResultsTable = ({
                       );
                     })}
                   </TableBody>
+                  <TableFooter>
+                    <TableRow>
+                      <TableCell>Total</TableCell>
+                      <TableCell className={"text-right"}>
+                        {housemate.total.toLocaleString(undefined, {
+                          style: "currency",
+                          currency: "GBP",
+                        })}
+                      </TableCell>
+                    </TableRow>
+                  </TableFooter>
                 </Table>
               );
             };
 
             return (
               <TableRow key={idx}>
-                <TableCell>{housemate.name}</TableCell>
+                <TableCell>{housemate.housemate.name}</TableCell>
                 <TableCell className={"text-right"}>
                   <Dialog>
                     <DialogTrigger className={"font-bold underline"}>
@@ -224,29 +158,29 @@ export const ResultsTable = ({
                       <DialogHeader>
                         <DialogTitle>Detailed View</DialogTitle>
                       </DialogHeader>
-                      <div className={"flex flex-row"}>
+                      <div className={"flex flex-row pb-10"}>
                         <ResponsiveContainer width={200} aspect={1}>
                           <PieChart>
                             <Tooltip />
                             <Legend verticalAlign={"bottom"} height={18} />
-
                             <Pie
-                              data={sanitisedHousemateTotals}
-                              dataKey="value"
-                              nameKey="name"
+                              data={pieChartData}
+                              dataKey="total"
+                              nameKey="housemate.name"
                               innerRadius={20}
                               outerRadius={40}
                               fill="#82ca9d"
                               label
                             >
-                              {sanitisedHousemateTotals.map((entry, index) => {
+                              {housemateTotalsWithRent.map((entry, index) => {
                                 return (
                                   <Cell
                                     key={`cell-${index}`}
                                     fill={
-                                      entry.name === housemate.name
+                                      entry.housemate.id ===
+                                      housemate.housemate.id
                                         ? "#8884d8"
-                                        : "#6a6a73"
+                                        : "#8c918e"
                                     }
                                   />
                                 );
@@ -259,14 +193,13 @@ export const ResultsTable = ({
                             <Tooltip />
                             <Legend verticalAlign={"bottom"} height={18} />
                             <Pie
-                              dataKey="value"
-                              data={sanitisedBillSplit}
+                              data={tableData}
                               nameKey="name"
+                              dataKey="amount"
                               innerRadius={20}
                               outerRadius={40}
                             >
-                              {sanitisedBillSplit.map((entry, index) => {
-                                if (!entry) return;
+                              {tableData.map((entry, index) => {
                                 return (
                                   <Cell
                                     key={`cell-${index}`}
@@ -279,6 +212,15 @@ export const ResultsTable = ({
                         </ResponsiveContainer>
                       </div>
                       <DataTable />
+                      <p>
+                        {housemate.housemate.name} is left with:{" "}
+                        {(
+                          housemate.housemate.income - housemate.total
+                        ).toLocaleString(undefined, {
+                          style: "currency",
+                          currency: currency,
+                        })}
+                      </p>
                     </DialogContent>
                   </Dialog>
                 </TableCell>
