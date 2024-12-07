@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     "google-adsense-account": "ca-pub-0957049115549750",
   },
   alternates: {
-    canonical: "https://splitmyrent.com",
+    canonical: "https://www.splitmyrent.com",
   },
 };
 
