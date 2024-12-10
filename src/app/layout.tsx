@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Ubuntu as FontSans } from "next/font/google";
+import { Open_Sans as FontSans } from "next/font/google";
 import "./globals.css";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";

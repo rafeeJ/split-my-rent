@@ -45,19 +45,31 @@ export const Navbar = () => {
   };
 
   return (
-    <div className={"flex flex-row items-center bg-secondary md:px-10"}>
-      <Link href={"/"} passHref>
-        <h1 className={"text-2xl p-2"}>💸 Split My Rent</h1>
+    <div
+      className={
+        "flex flex-row items-center dark:bg-secondary bg-primary px-2 md:px-10"
+      }
+    >
+      <Link
+        href={"/"}
+        passHref
+        className={"flex flex-row items-center text-white"}
+      >
+        <h1 className={"text-lg"}>💸</h1>
+        <h1 className={"text-lg font-bold p-2"}>splitmy.rent</h1>
       </Link>
       <div className={"grow"} />
       <Link href={"/blog"} passHref className={"underline"}>
-        <Button variant={"ghost"} className={"btn btn-primary underline"}>
-          Blog
+        <Button
+          variant={"ghost"}
+          className={"btn btn-primary underline text-white"}
+        >
+          Check out our blog 📝
         </Button>
       </Link>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant={"ghost"} className={"btn btn-primary"}>
+          <Button variant={"ghost"} className={"btn btn-primary text-white"}>
             {currency}
             <ChevronDownIcon size={15} className={"ml-1"} />
           </Button>
@@ -82,7 +94,7 @@ export const Navbar = () => {
       </DropdownMenu>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant={"ghost"} className={"btn btn-primary"}>
+          <Button variant={"ghost"} className={"btn btn-primary text-white"}>
             <SettingsIcon size={20} />
           </Button>
         </DropdownMenuTrigger>
