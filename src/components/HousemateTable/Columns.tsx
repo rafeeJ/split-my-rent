@@ -7,17 +7,17 @@ export type THousemate = {
   id: number;
   name: string;
   income: number;
-  proportion?: string;
 };
 
 const columnHelper = createColumnHelper<THousemate>();
 
 export const columns = [
   columnHelper.accessor("name", {
-    header: "name",
+    header: "Name",
     cell: TextCell,
   }),
   columnHelper.accessor("income", {
+    header: "Income",
     cell: CurrencyCell,
     id: "income",
   }),
